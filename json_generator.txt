@@ -1,0 +1,60 @@
+[
+  '{{repeat(5)}}',
+  {
+    Number: function(num) {
+      return  + num.integer(1,5);
+    },
+    Email: '{{email()}}',
+    PhoneNumber: '{{phone()}}',
+    Company: '{{company()}}',
+    Department: '{{lorem(1, "word")}}'
+  }
+]
+
+
+users
+
+[
+  '{{repeat(5)}}',
+  {
+    UserName: '{{firstName("female")}}',
+    Email: '{{email()}}',
+    PhoneNumber: '{{phone()}}',
+    Company: '{{company()}}',
+    Department: '{{lorem(1, "word")}}'
+  }
+]
+
+lines
+
+[
+  '{{repeat(5)}}',
+  {
+    Length: function(num) {
+      return  + num.integer(1,5);
+    },
+    Description: '{{lorem(1, "paragraphs")}}',
+    Symbol: function(num) {
+          return 'L' + num.integer(1,99);
+        }
+  }
+]
+
+notifications
+
+
+[
+  '{{repeat(5)}}',
+  {
+    LineId: function(num) {
+      return  + num.integer(1,5);
+    },
+    UserId: function(num) {
+      return  + num.integer(1,5);
+    },
+    Created: '{{date(new Date(2019, 0, 1), new Date(2020,5,30), "YYYY-MM-dd")}}',
+    Description: '{{lorem(1, "paragraphs")}}'
+  }
+]
+
+
