@@ -22,7 +22,7 @@ namespace API.DTOs
         public string Email { get; set; }
         
         [Required]
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
         
     }
 }

@@ -1,0 +1,8 @@
+cd C:\Users\Piotr\Documents\CSharp_projects\LineApp>
+cd API
+dotnet run
+cd client
+ng serve
+[system.Diagnostics.Process]::Start("chrome", "https://localhost:4200")
+
+

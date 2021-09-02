@@ -51,7 +51,7 @@ namespace API.Data
 
             var admin = new AppUser
             {
-                UserName = "Admin",
+                UserName = "admin",
                 Department = "XXX",
                 Company = "Phizer",
                 Email = "admin@admin.gmail.com",

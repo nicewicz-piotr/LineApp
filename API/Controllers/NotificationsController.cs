@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class NotificationsController : BaseApiController
     {
         private readonly IMapper _mapper;

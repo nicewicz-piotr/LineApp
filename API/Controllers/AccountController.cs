@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -67,6 +68,12 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
+            //var user1 = await _userManager.FindByNameAsync(loginDto.Username);
+            //if (!(await UserExists(loginDto.Username))) return Unauthorized();
+            //if (user1 == null) return Unauthorized();
+            if (String.IsNullOrEmpty(loginDto.Password) || 
+                String.IsNullOrEmpty(loginDto.Username)) return Unauthorized();
+
             var user = await _userManager.Users
                     .Include(u => u.Notifications)
                     .SingleOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());

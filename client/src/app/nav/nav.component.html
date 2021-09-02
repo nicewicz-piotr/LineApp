@@ -1,0 +1,83 @@
+<!--<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">-->
+  <nav  class="navbar navbar-default navbar-expand-md navbar-dark  bg-dark">
+    <div class="container" style="display: flex; justify-content: flex-end">
+            
+              <ul class="navbar-nav mr-auto" >
+                
+                <ng-container *ngIf="accountService.currentUser$ | async">
+                  <li class="nav-item">
+                    <a class="nav-link" routerLink='/lines' routerLinkActive='active'>Lines</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" routerLinkActive='active'>Notifications</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" routerLinkActive='active'>Photos</a>
+                  </li>
+                </ng-container>
+                
+                <li class="nav-item">
+                  <a class="nav-link" routerLink='/errors' routerLinkActive='active'>Errors</a>
+                </li>
+
+              </ul>
+
+              <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
+
+                <a  class="dropdown-toggle text-light" dropdownToggle>Welcome {{user.userName | titlecase}}</a>
+                <div class="dropdown-menu mt-3" *dropdownMenu>
+                  <a href="#" class="dropdown-item">User Profile</a>
+                  <div class="dropdown-divider"></div>
+                  <a href="#" class="dropdown-item" (click)="logout()">Logout</a>
+                </div>
+             
+              </div>
+
+              <div class="btn-group" *ngIf="(accountService.currentUser$ | async) === null">
+              <form  #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" 
+                autocomplete="off">
+                <input 
+                    name="username"
+                    [(ngModel)]="model.username"
+                    class="form-control mr-2" 
+                    type="text" 
+                    placeholder="Username">
+                <input 
+                    name="password"
+                    [(ngModel)]="model.password"
+                    class="form-control mr-2" 
+                    type="password" 
+                    placeholder="Password">
+                <button class="btn btn-outline-success" type="submit">Login</button>
+              </form>
+              
+              
+              <button class="btn btn-outline-success"  
+              (click)="registerFormToggle()">Register</button>
+              
+              <!--
+              <button class="btn btn-outline-success" 
+              (click)="isCollapsed = !isCollapsed" 
+              [attr.aria-expanded]="!isCollapsed" 
+              aria-controls="collapseBasic">Register</button>
+              -->
+            </div>
+          </div>
+       
+
+  </nav>
+
+  
+  <div>
+    <app-register [(showForm)]="showRegisterForm" ></app-register>
+  </div>
+
+  <div>
+    <router-outlet *ngIf="!showRegisterForm"></router-outlet>
+  </div>
+
+   <!--
+  <div id="collapseBasic" [(collapse)]="isCollapsed" [isAnimated]="true">
+    <app-register ></app-register>
+  </div>
+  -->

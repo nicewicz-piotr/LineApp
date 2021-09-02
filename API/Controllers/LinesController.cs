@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class LinesController : BaseApiController
     {
         private readonly IMapper _mapper;
@@ -67,10 +67,9 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LineDto>>> GetLinesForPage([FromQuery] LineParams lineParams)
         {
-            //lineParams.CurrentLineId = _unitOfWork.LineRepository.
             AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
             
-            if(user == null) return Unauthorized();
+            //if(user == null) return Unauthorized();
 
             var lines = await _unitOfWork.LineRepository.GetLinesAsync(lineParams);
 

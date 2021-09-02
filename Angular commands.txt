@@ -1,0 +1,36 @@
+new project:
+ng new client
+ng new <project-name>
+
+new component
+ng generate component <component-name>
+
+styles
+ng add ngx-bootstrap
+
+fonts
+npm install font-awesome
+
+new component, no tests
+
+ng g c "name" --skip-tests
+
+new service, no tests
+
+ng g s "name" --skip-tests
+
+new guard
+
+ng g guard auth --skip-tests
+
+better styling
+
+npm install bootswatch
+
+new modules
+
+ng g m "name" --flat
+
+interceptor
+
+ng g interceptor "name" --skip-tests
