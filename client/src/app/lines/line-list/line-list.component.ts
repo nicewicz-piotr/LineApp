@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, OnInit } from '@angular/core';
 
 import { Line } from 'src/app/_models/line';
+import { LineParams } from 'src/app/_models/lineParams';
 import { Pagination } from 'src/app/_models/pagination';
 import { LinesService } from 'src/app/_services/lines.service';
 
@@ -60,25 +61,28 @@ animations: [
 export class LineListComponent implements OnInit {
   lines: Line[]; 
   showChildTable: boolean[] = [];
+  toggleSort: boolean[] = [true, true, true, true];
   selectedItems: Line[];
   deletedElement: Line;
   pagination: Pagination;
-  pageNumber = 1;
-  pageSize = 5;
+  lineParams: LineParams; 
 
-  constructor(private lineService: LinesService) { }
+  constructor(private lineService: LinesService) {
+    this.lineParams = new LineParams();
+   }
 
   ngOnInit(): void {
     this.loadLines();
   }
 
   loadLines(){
-    this.lineService.getLines(this.pageNumber, this.pageSize).subscribe(response => {
+    this.lineService.getLines(this.lineParams).subscribe(response => {
       //this.lines = lines;
       //this.selectedItems = lines;
       this.lines = response.result;
       this.pagination = response.pagination;
       this.selectedItems = response.result;
+      //this.toggleSort = this.toggleSort && 
     })
   }
 
@@ -100,8 +104,13 @@ export class LineListComponent implements OnInit {
   }
 
   pageChanged(event: any){
-    this.pageNumber = event.page;
+    this.lineParams.pageNumber = event.page;
     this.loadLines();
+    this.showChildTable = []; //stop showing all child table
+  }
+
+  testClick(){
+    console.log("Kliknięty element!!!!");
   }
 
 

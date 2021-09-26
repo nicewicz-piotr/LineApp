@@ -1,11 +1,66 @@
+<div class="container mt-3">
+  <form #form="ngForm" class="form-inline mb-3" 
+  (ngSubmit)="loadLines()" autocomplete="off">
+      <div class="form-group">
+        <label>Search: </label>
+        <input type="text" 
+        class="form-control ml-1" 
+        style="width: 200px;" name="lineSymbol" 
+        [(ngModel)]="lineParams.lineSymbol" 
+        placeholder="line symbol">
+  
+    <button class="btn btn-outline-secondary btn-sm ml-1"
+     type="submit"><i class="fa fa-search"></i>
+    </button>
+    
+    </div>
+  </form>
+</div>
+
 <div class="container">
 <table class="table table-sm mt-4">
     <thead>
       <tr>
-        <th scope="col"></th>
-        <th scope="col">Id</th>
-        <th scope="col">Symbol</th>
-        <th scope="col">Length</th>
+        <th scope="col">
+          <button  (click)="loadLines(); toggleSort[0] = !toggleSort[0]"
+            name='orderBy'
+            [btnRadio]="toggleSort[0] ?
+            'notificationsAmountDesc' : 
+            'notificationsAmountAsc'"
+            [(ngModel)]="lineParams.orderBy">
+            Not. amount
+          </button>  
+        </th>
+        <th scope="col">
+          <button  (click)="loadLines(); toggleSort[1] = !toggleSort[1]"
+            name='orderBy'
+            [btnRadio]="toggleSort[1] ?
+            'idDesc' : 
+            'idAsc'"
+            [(ngModel)]="lineParams.orderBy">
+            Id
+          </button>
+        </th>
+        <th scope="col">
+          <button  (click)="loadLines(); toggleSort[2] = !toggleSort[2]"
+            name='orderBy'
+            [btnRadio]="toggleSort[2] ?
+            'symbolDesc' : 
+            'symbolAsc'"
+            [(ngModel)]="lineParams.orderBy">
+            Symbol
+          </button>
+        </th>
+        <th scope="col">
+          <button  (click)="loadLines(); toggleSort[3] = !toggleSort[3]"
+            name='orderBy'
+            [btnRadio]="toggleSort[3] ?
+            'lengthDesc' : 
+            'lengthAsc'"
+            [(ngModel)]="lineParams.orderBy">
+            Length
+          </button>
+        </th>
         <th class="col-sm-1"></th>
         <th class="col-sm-1"></th>
       </tr>

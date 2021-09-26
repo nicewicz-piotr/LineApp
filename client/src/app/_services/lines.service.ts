@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Line } from '../_models/line';
+import { LineParams } from '../_models/lineParams';
 import { PaginatedResult } from '../_models/pagination';
 
 const httpOptions = {
@@ -17,30 +18,41 @@ const httpOptions = {
 export class LinesService {
   baseUrl = environment.apiUrl;
   lines: Line[] = [];
-  paginatedResult: PaginatedResult<Line[]> = new PaginatedResult<Line[]>();
 
   constructor(private http: HttpClient) { }
 
-  getLines(page?: number, itemsPerPage?: number){
+  getLines(lineParams: LineParams){
+
+    let params = this.getPaginationHeaders(lineParams.pageNumber, lineParams.pageSize);
     
+    params = params.append('lineSymbol', lineParams.lineSymbol);
+    params = params.append('orderBy', lineParams.orderBy);
+
+    return this.getPaginationResult<Line[]>(this.baseUrl + 'lines', params)
+  }
+
+  private getPaginationResult<T>(url, params) {
+
+    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
+
+    return this.http.get<T>(url, { observe: 'response', params }).pipe(
+      map(response => {
+        paginatedResult.result = response.body;
+        if (response.headers.get('Pagination') !== null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination')); //download from header and set properties of pagination interface
+        }
+        return paginatedResult;
+      })
+    );
+  }
+
+  private getPaginationHeaders(pageNumber: number, pageSize: number){
     let params = new HttpParams();
 
-    if(page != null && itemsPerPage !== null){
-      params = params.append('pageNumber', page.toString());
-      params = params.append('pageSize', itemsPerPage.toString());
-    }
-    //if(this.lines.length > 0) return of(this.lines);
-    //return this.http.get<Line[]>(this.baseUrl + 'lines', httpOptions);
-    return this.http.get<Line[]>(this.baseUrl + 'lines', {observe: 'response', params}).pipe(
-      map(response => {
-        this.paginatedResult.result = response.body;
-        if(response.headers.get('Pagination') !== null){
-          this.paginatedResult.pagination = JSON.parse(response.headers.get('Pagination')); //download from header and set properties of pagination interface
-        }
-        return this.paginatedResult;
-      })
-     
-    )
+      params = params.append('pageNumber', pageNumber.toString());
+      params = params.append('pageSize', pageSize.toString());
+
+      return params;
   }
 
   getLine(id: number){

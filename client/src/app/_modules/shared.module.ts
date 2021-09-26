@@ -4,6 +4,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ToastrModule } from 'ngx-toastr';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ButtonsModule} from 'ngx-bootstrap/buttons'
 
 
 
@@ -17,12 +18,14 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
       positionClass: 'toast-bottom-left', preventDuplicates: true, timeOut: 10000,
       progressAnimation: 'increasing', progressBar: true
     }),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    ButtonsModule.forRoot()
   ],
   exports: [
     BsDropdownModule,
     ToastrModule,
-    PaginationModule
+    PaginationModule,
+    ButtonsModule
   ]
 })
 export class SharedModule { }
