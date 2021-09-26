@@ -71,6 +71,9 @@ namespace API.Controllers
             
             //if(user == null) return Unauthorized();
 
+            //if(string.IsNullOrEmpty(lineParams.LineSymbol)){}
+            //    lineParams.LineSymbol = 
+
             var lines = await _unitOfWork.LineRepository.GetLinesAsync(lineParams);
 
             Response.AddPaginationHeader(lines.CurrentPage, lines.PageSize, lines.TotalCount, lines.TotalPages);

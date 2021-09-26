@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Entities;
 using API.Helpers;
@@ -63,9 +64,10 @@ namespace API.Data
         public async Task<PagedList<LineDto>> GetLinesAsync(LineParams lineParams)
         {
             var query = _context.Lines.AsQueryable();
-
-            return await PagedList<LineDto>.CreateAsync(query.ProjectTo<LineDto>(_mapper.
-            ConfigurationProvider).AsNoTracking(), lineParams.PageNumber, lineParams.PageSize);
+            
+            if(!string.IsNullOrEmpty(lineParams.LineSymbol))
+                //query = query.Where(u => u.Symbol == lineParams.LineSymbol);
+                query = query.Where(u => u.Symbol.Contains(lineParams.LineSymbol.ToUpper()));
 
             // query = query.Where(u => u.UserName != userParams.CurrentUsername);
             // query = query.Where(u => u.Gender == userParams.Gender);
@@ -80,6 +82,23 @@ namespace API.Data
             //     "created" => query.OrderByDescending(u => u.Created),
             //     _ => query.OrderByDescending(u => u.LastActive)
             // };
+
+            query = lineParams.OrderBy switch 
+            {
+                "notificationsAmountAsc" => query.OrderBy(u => u.Notifications.Count),
+                "notificationsAmountDesc" => query.OrderByDescending(u => u.Notifications.Count),
+                "idAsc" => query.OrderBy(u => u.Id),
+                "idDesc" => query.OrderByDescending(u => u.Id),
+                "symbolAsc" => query.OrderBy(u => u.Symbol),
+                "symbolDesc" => query.OrderByDescending(u => u.Symbol),
+                "lengthAsc" => query.OrderBy(u => u.Length),
+                "lengthDesc" => query.OrderByDescending(u => u.Length),
+                
+                _ => query.OrderBy(u => u.Id)
+            };
+
+            return await PagedList<LineDto>.CreateAsync(query.ProjectTo<LineDto>(_mapper.
+            ConfigurationProvider).AsNoTracking(), lineParams.PageNumber, lineParams.PageSize);
 
             // return await PagedList<MemberDto>.CreateAsync(query.ProjectTo<MemberDto>(_mapper.
             // ConfigurationProvider).AsNoTracking(), userParams.PageNumber, userParams.PageSize);
