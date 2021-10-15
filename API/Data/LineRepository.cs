@@ -69,6 +69,8 @@ namespace API.Data
                 //query = query.Where(u => u.Symbol == lineParams.LineSymbol);
                 query = query.Where(u => u.Symbol.Contains(lineParams.LineSymbol.ToUpper()));
 
+
+
             // query = query.Where(u => u.UserName != userParams.CurrentUsername);
             // query = query.Where(u => u.Gender == userParams.Gender);
 

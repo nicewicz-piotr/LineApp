@@ -1,11 +1,11 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+//import { Console } from 'console';
 
 import { Line } from 'src/app/_models/line';
 import { LineParams } from 'src/app/_models/lineParams';
 import { Pagination } from 'src/app/_models/pagination';
 import { LinesService } from 'src/app/_services/lines.service';
-
 
 @Component({
   selector: 'app-line-list',
@@ -61,15 +61,17 @@ animations: [
 export class LineListComponent implements OnInit {
   lines: Line[]; 
   showChildTable: boolean[] = [];
-  toggleSort: boolean[] = [true, true, true, true];
+  toggleSort: boolean[] = [];
+  headerArray: number[];
   selectedItems: Line[];
   deletedElement: Line;
   pagination: Pagination;
   lineParams: LineParams; 
-
+  
   constructor(private lineService: LinesService) {
     this.lineParams = new LineParams();
-   }
+    this.headerArray =  Array.from(Array(this.lineParams.headerTableNames.length).keys());
+  }
 
   ngOnInit(): void {
     this.loadLines();

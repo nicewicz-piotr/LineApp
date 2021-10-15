@@ -21,45 +21,17 @@
 <table class="table table-sm mt-4">
     <thead>
       <tr>
-        <th scope="col">
-          <button  (click)="loadLines(); toggleSort[0] = !toggleSort[0]"
+        <th scope="col" *ngFor="let index of headerArray; ">
+          <button   class="btn btn-secondary" 
+            (click)="loadLines(); 
+            toggleSort[index] = !toggleSort[index]"
             name='orderBy'
-            [btnRadio]="toggleSort[0] ?
-            'notificationsAmountDesc' : 
-            'notificationsAmountAsc'"
+            [btnRadio]="toggleSort[index] ?
+            lineParams.filterArrayListAsc[index] : 
+            lineParams.filterArrayListDesc[index]"
             [(ngModel)]="lineParams.orderBy">
-            Not. amount
+            {{lineParams.headerTableNames[index]}}
           </button>  
-        </th>
-        <th scope="col">
-          <button  (click)="loadLines(); toggleSort[1] = !toggleSort[1]"
-            name='orderBy'
-            [btnRadio]="toggleSort[1] ?
-            'idDesc' : 
-            'idAsc'"
-            [(ngModel)]="lineParams.orderBy">
-            Id
-          </button>
-        </th>
-        <th scope="col">
-          <button  (click)="loadLines(); toggleSort[2] = !toggleSort[2]"
-            name='orderBy'
-            [btnRadio]="toggleSort[2] ?
-            'symbolDesc' : 
-            'symbolAsc'"
-            [(ngModel)]="lineParams.orderBy">
-            Symbol
-          </button>
-        </th>
-        <th scope="col">
-          <button  (click)="loadLines(); toggleSort[3] = !toggleSort[3]"
-            name='orderBy'
-            [btnRadio]="toggleSort[3] ?
-            'lengthDesc' : 
-            'lengthAsc'"
-            [(ngModel)]="lineParams.orderBy">
-            Length
-          </button>
         </th>
         <th class="col-sm-1"></th>
         <th class="col-sm-1"></th>
@@ -122,4 +94,7 @@
     The selected page no: {{pagination.currentPage}}/{{smallnumPages}}
   </pre>
   -->
+  <div class="alert alert-dismissible alert-light">
+    selected page no: {{pagination.currentPage}} from {{pagination.totalPages}}
+  </div>
 </div>
