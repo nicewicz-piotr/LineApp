@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,9 +66,23 @@ namespace API.Data
         {
             var query = _context.Lines.AsQueryable();
             
-            if(!string.IsNullOrEmpty(lineParams.LineSymbol))
+            if(!string.IsNullOrEmpty(lineParams.SearchText))
+            {
+                int.TryParse(lineParams.SearchText, out int id);
+
+                query = lineParams.SearchBy switch 
+                {
+                    "symbol" => query.Where(u => u.Symbol.Contains(lineParams.SearchText.ToUpper())),
+                    "id"  =>  query.Where(u => u.Id == id),
+
+                    _ => query.Where(u => u.Symbol.Contains(lineParams.SearchText.ToUpper()))
+                };
+                //query = query.Where(u => u.Symbol.Contains(lineParams.SearchBy.ToUpper()));
+            }
+                
+                //if(!string.IsNullOrEmpty(lineParams.SearchBy))
                 //query = query.Where(u => u.Symbol == lineParams.LineSymbol);
-                query = query.Where(u => u.Symbol.Contains(lineParams.LineSymbol.ToUpper()));
+                //query = query.Where(u => u.Symbol.Contains(lineParams.LineSymbol.ToUpper()));
 
 
 

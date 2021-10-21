@@ -1,0 +1,40 @@
+<div class="form-group position-relative">
+    <input [class.is-invalid]="ngControl.invalid 
+     && ngControl.touched"
+     type={{type}} 
+     class="form-control mt-4 text-center" 
+     [formControl]="ngControl.control"
+     placeholder={{label}}>
+    
+    <div *ngIf="ngControl.control.errors?.required"
+        class="invalid-tooltip">
+        {{label}} is required.   
+    </div>
+     
+    <div *ngIf="ngControl.control.errors?.minlength"
+        class="invalid-tooltip">
+        {{label}} must be at least {{ngControl.control.errors.minlength['requiredLength']}} 
+    </div>
+
+    <div *ngIf="ngControl.control.errors?.maxlength"
+        class="invalid-tooltip">
+        {{label}} must be at most {{ngControl.control.errors.maxlength['requiredLength']}} 
+    </div>
+
+    <div *ngIf="ngControl.control.errors?.isMatching && !ngControl.control.errors?.required" 
+        class="invalid-tooltip">
+        Password do not match
+    </div>
+
+    <div *ngIf="ngControl.control.errors?.email"
+        class="invalid-tooltip">
+        Invaild form of email
+    </div>
+
+    <div *ngIf="ngControl.control.errors?.pattern && !ngControl.control.errors?.minlength"
+        class="invalid-tooltip">
+        Password must have at least one lowercase and one uppercase
+    </div>
+
+    
+</div>

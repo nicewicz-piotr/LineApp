@@ -30,6 +30,10 @@ export class AccountService {
   }
 
   register(model: any){
+    return this.http.post(this.baseUrl + 'account/register', model);
+  }
+  /*
+  register(model: any){
     return this.http.post(this.baseUrl + 'account/register', model).pipe(
       map((user: User) => {
         if(user){
@@ -40,6 +44,7 @@ export class AccountService {
       })
     )
   }
+  */
 
   setCurrentUser(user: User){
     this.currentUserSource.next(user);

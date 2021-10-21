@@ -4,8 +4,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ToastrModule } from 'ngx-toastr';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { ButtonsModule} from 'ngx-bootstrap/buttons'
-
+import { ButtonsModule} from 'ngx-bootstrap/buttons';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 
 @NgModule({
@@ -19,13 +19,15 @@ import { ButtonsModule} from 'ngx-bootstrap/buttons'
       progressAnimation: 'increasing', progressBar: true
     }),
     PaginationModule.forRoot(),
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    BsDatepickerModule.forRoot()
   ],
   exports: [
     BsDropdownModule,
     ToastrModule,
     PaginationModule,
-    ButtonsModule
+    ButtonsModule,
+    BsDatepickerModule
   ]
 })
 export class SharedModule { }

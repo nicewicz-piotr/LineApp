@@ -2,16 +2,27 @@
   <form #form="ngForm" class="form-inline mb-3" 
   (ngSubmit)="loadLines()" autocomplete="off">
       <div class="form-group">
-        <label>Search: </label>
+        <label>Search by: </label>
         <input type="text" 
         class="form-control ml-1" 
-        style="width: 200px;" name="lineSymbol" 
-        [(ngModel)]="lineParams.lineSymbol" 
-        placeholder="line symbol">
+        style="width: 200px;" name="search" 
+        [(ngModel)]="lineParams.searchText"
+        placeholder={{lineParams.searchBy}}>
   
     <button class="btn btn-outline-secondary btn-sm ml-1"
      type="submit"><i class="fa fa-search"></i>
     </button>
+
+    <div>
+      <select class="form-select ml-1"
+       id="Select1"
+        name='searchBy'
+         [(ngModel)]="lineParams.searchBy">
+        <option *ngFor="let searchOption of lineParams.searchListOptions">
+          {{searchOption}}
+        </option> 
+      </select>
+    </div>
     
     </div>
   </form>
@@ -27,8 +38,8 @@
             toggleSort[index] = !toggleSort[index]"
             name='orderBy'
             [btnRadio]="toggleSort[index] ?
-            lineParams.filterArrayListAsc[index] : 
-            lineParams.filterArrayListDesc[index]"
+            lineParams.orderByListAsc[index] : 
+            lineParams.orderByListDesc[index]"
             [(ngModel)]="lineParams.orderBy">
             {{lineParams.headerTableNames[index]}}
           </button>  
@@ -87,9 +98,8 @@
   (pageChanged)="pageChanged($event)"
   >
 
-</pagination> 
+  </pagination> 
   <!--
-
     <pre class="card card-block card-header mb-3">
     The selected page no: {{pagination.currentPage}}/{{smallnumPages}}
   </pre>
@@ -97,4 +107,17 @@
   <div class="alert alert-dismissible alert-light">
     selected page no: {{pagination.currentPage}} from {{pagination.totalPages}}
   </div>
+
+  <div>
+    <select class="form-select ml-1"
+     id="Select2"
+      name='pageSize'
+      (change)="loadLines()"
+       [(ngModel)]="lineParams.pageSize">
+      <option value='5'>5</option>
+      <option value='10'>10</option> 
+    </select>
+  </div>
+
+
 </div>

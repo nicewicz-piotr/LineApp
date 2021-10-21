@@ -2,13 +2,30 @@ import { Line } from "./line";
 
 export class LineParams {
     currentLineId : number;
-    lineSymbol: string = "";
-    pageNumber = 1;
-    pageSize = 5;
+    searchBy: string  ='symbol';
+    searchListOptions: string[] = ['symbol','id'];
+    searchText: string = "";
     orderBy  = 'currentLineId'
-    filterArrayListAsc: String[] = ['notificationsAmountAsc', 'idAsc', 'symbolAsc', 'lengthAsc'];
-    filterArrayListDesc: String[] = ['notificationsAmountDesc', 'idDesc', 'symbolDesc', 'lengthDesc'];
-    headerTableNames: String [] = ['Not. amount', 'Id', 'Symbol', 'Length'];
+    orderByListAsc: String[] = [
+        'notificationsAmountAsc',
+        'idAsc',
+        'symbolAsc',
+        'lengthAsc'
+    ];
+    orderByListDesc: String[] = [
+        'notificationsAmountDesc', 
+        'idDesc',
+        'symbolDesc',
+        'lengthDesc'
+    ];
+    headerTableNames: String [] = [
+        'Not. amount',
+        'Id',
+        'Symbol',
+        'Length'
+    ];
+    pageNumber = 1;
+    pageSize: number = 5; 
     
     constructor(){
 

@@ -69,7 +69,7 @@ export class LineListComponent implements OnInit {
   lineParams: LineParams; 
   
   constructor(private lineService: LinesService) {
-    this.lineParams = new LineParams();
+    this.lineParams = this.lineService.getLineParams();
     this.headerArray =  Array.from(Array(this.lineParams.headerTableNames.length).keys());
   }
 
@@ -78,13 +78,11 @@ export class LineListComponent implements OnInit {
   }
 
   loadLines(){
+    this.lineService.setLineParams(this.lineParams);
     this.lineService.getLines(this.lineParams).subscribe(response => {
-      //this.lines = lines;
-      //this.selectedItems = lines;
       this.lines = response.result;
       this.pagination = response.pagination;
       this.selectedItems = response.result;
-      //this.toggleSort = this.toggleSort && 
     })
   }
 
@@ -107,6 +105,7 @@ export class LineListComponent implements OnInit {
 
   pageChanged(event: any){
     this.lineParams.pageNumber = event.page;
+    this.lineService.setLineParams(this.lineParams);
     this.loadLines();
     this.showChildTable = []; //stop showing all child table
   }

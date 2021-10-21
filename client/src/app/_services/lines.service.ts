@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Line } from '../_models/line';
@@ -18,18 +19,43 @@ const httpOptions = {
 export class LinesService {
   baseUrl = environment.apiUrl;
   lines: Line[] = [];
+  lineCache = new Map();
+  lineParams: LineParams;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.lineParams = new LineParams();
+  }
 
   getLines(lineParams: LineParams){
 
+    console.log(Object.values(lineParams).join('-'));
+    var response = this.lineCache.get(Object.values(lineParams).join('-'));
+
+    if(response){
+      return of(response);
+    }
+
     let params = this.getPaginationHeaders(lineParams.pageNumber, lineParams.pageSize);
-    
-    params = params.append('lineSymbol', lineParams.lineSymbol);
+  
+    params = params.append('searchText', lineParams.searchText);
+    params = params.append('searchBy', lineParams.searchBy);
     params = params.append('orderBy', lineParams.orderBy);
 
     return this.getPaginationResult<Line[]>(this.baseUrl + 'lines', params)
+    .pipe(map(response => {
+      this.lineCache.set(Object.values(lineParams).join('-'), response);
+      return response;
+    }))
   }
+
+  getLineParams(){
+    return this.lineParams;
+  }
+
+  setLineParams(params: LineParams){
+    this.lineParams = params;
+  }
+
 
   private getPaginationResult<T>(url, params) {
 
@@ -56,6 +82,15 @@ export class LinesService {
   }
 
   getLine(id: number){
+    console.log(this.lineCache);
+    const line = [...this.lineCache.values()]
+    .reduce((arr, elem) => arr.concat(elem.result), [])
+    .find((line: Line) => line.id === id);
+
+    if(line){
+      return of(line);
+    }
+
     return this.http.get<Line>(this.baseUrl + 'lines/' + id, httpOptions);
   }
 }

@@ -1,56 +1,31 @@
 <div *ngIf="showForm" class="d-flex flex-row justify-content-center">
     <!--<div *ngIf="!collapse" class="d-flex flex-row justify-content-center"></div>-->
     <!--<div class="d-flex flex-row justify-content-center">-->    
-    <form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off" class="col-sm-5" >
-        <h2 class="text-center text-info">Registration</h2>
+    <form [formGroup]='registerForm' (ngSubmit)="registerForm.valid && register()" autocomplete="off" class="col-sm-6" >
+        <h2 class="text-center text-info mt-4">Registration</h2>
         <hr>
-        <div class="form-group">
-            <input type="text" class="form-control text-center"
-             name="username" 
-             [(ngModel)]="model.username"
-             placeholder="Username">
-        </div>
-
-        <div class="form-group">
-            <input type="password" class="form-control text-center"
-             name="password" 
-             [(ngModel)]="model.password"
-             placeholder="Password">
-        </div>
         
-        <div class="form-group">
-            <input type="text" class="form-control text-center"
-             name="company" 
-             [(ngModel)]="model.company"
-             placeholder="Company">
-        </div>
+        <app-text-input [formControl]='registerForm.controls["userName"]' [label]='"Username"'></app-text-input>
+        <app-text-input [formControl]='registerForm.controls["password"]' [label]='"Password"' [type]='"password"'></app-text-input>
+        <app-text-input [formControl]='registerForm.controls["confirmPassword"]' [label]='"Confirm Password"' [type]='"password"'></app-text-input>
+        <app-text-input [formControl]='registerForm.controls["company"]' [label]='"Company"'></app-text-input>
+        <app-text-input [formControl]='registerForm.controls["phoneNumber"]' [label]='"Phone number"'></app-text-input>
+        <app-text-input [formControl]='registerForm.controls["email"]' [label]='"Email"'></app-text-input>
+        <app-text-input [formControl]='registerForm.controls["department"]' [label]='"Department"'></app-text-input>
 
-        
-        <div class="form-group">
-            <input type="tel" class="form-control text-center"
-             name="phonenumber" 
-             [(ngModel)]="model.phonenumber"
-             placeholder="Phone">
-        </div>
-
-        <div class="form-group">
-            <input type="email" class="form-control text-center"
-             name="email" 
-             [(ngModel)]="model.email"
-             placeholder="Email">
-        </div>
-
-        <div class="form-group">
-            <input type="text" class="form-control text-center"
-             name="department" 
-             [(ngModel)]="model.department"
-             placeholder="Department">
-        </div>
+        <!--
+        <app-date-input [formControl]='registerForm.controls["somedate"]' [label]='"Date"'></app-date-input>
+        -->
 
         <div class="form-group text-center">
-            <button class="btn btn-success mr-2" type="submit">Submit</button>
+            <button [disabled]="!registerForm.valid" class="btn btn-success mr-2" type="submit">Submit</button>
             <button class="btn btn-default mr-2" (click)="cancel()" type="button">Cancel</button>
         </div>
     </form>
+
+    <!--
+    <p>Form value: {{registerForm.value | json}}</p>
+    <p>Form status: {{registerForm.status | json}}</p>
+    -->
 </div>
 <!--</div>--> 
