@@ -1,60 +1,26 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 //import { Console } from 'console';
+import { expandCollapse } from 'src/app/_animations/expand-collapse';
+import { deleteItem } from 'src/app/_animations/delete-Item';
 
 import { Line } from 'src/app/_models/line';
 import { LineParams } from 'src/app/_models/lineParams';
 import { Pagination } from 'src/app/_models/pagination';
 import { LinesService } from 'src/app/_services/lines.service';
+import { ToastrService } from 'ngx-toastr';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { DeleteLineModalComponent } from 'src/app/modals/delete-line-modal/delete-line-modal.component';
+import { InsertLineModalComponent } from 'src/app/modals/insert-line-modal/insert-line-modal.component';
 
 @Component({
   selector: 'app-line-list',
   templateUrl: './line-list.component.html',
 
 animations: [  
-  trigger('expandCollapse', [  
-    state('collapsed', style({  
-      height: 0,  
-      paddingTop: 0,  
-      paddingBottom: 0,  
-      overflow: 'hidden'      // This will hide the children of the div  
-    })),  
-  
-    state('expanded', style({  
-      height: '*',          // Height depends upon the content. So Angular computes it dynamically  
-      padding: '*',  
-      overflow: 'hidden'  
-    })),  
-  
-    // finally we need to add transition  
-    transition('collapsed => expanded', [  
-      // Don't want any initially animation at collapsed state. So,  
-      animate('300ms ease-out')  
-    ]),  
-  
-    transition('expanded => collapsed', [  
-      animate('300ms ease-in')  
-    ])  
-  ]),
-  
-  
-  trigger('deleteItem', [
-    state('expanded', style({ 
-      height: '*', /*display: 'block',*/ 
-      color:'black' })),
-
-    state('collapsed', style({ 
-      height: '0px', 
-      maxHeight: '0', 
-      display: 'none', 
-      color: 'white' })),
-
-    transition('expanded <=> collapsed', 
-    [animate('1000ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-  ]),
-]),
+  expandCollapse,
+  deleteItem
 ]  
-
 
 })
 
@@ -63,12 +29,14 @@ export class LineListComponent implements OnInit {
   showChildTable: boolean[] = [];
   toggleSort: boolean[] = [];
   headerArray: number[];
-  selectedItems: Line[];
   deletedElement: Line;
   pagination: Pagination;
-  lineParams: LineParams; 
+  lineParams: LineParams;
+  bsModalRef: BsModalRef; 
   
-  constructor(private lineService: LinesService) {
+  constructor(private lineService: LinesService, 
+              private toastr: ToastrService, 
+              private modalServeice: BsModalService) {
     this.lineParams = this.lineService.getLineParams();
     this.headerArray =  Array.from(Array(this.lineParams.headerTableNames.length).keys());
   }
@@ -82,25 +50,31 @@ export class LineListComponent implements OnInit {
     this.lineService.getLines(this.lineParams).subscribe(response => {
       this.lines = response.result;
       this.pagination = response.pagination;
-      this.selectedItems = response.result;
     })
   }
 
-  deleteFromCart(id: number){
-    // *********EXECUTING ONLY ANIMATIONS*******************************
+  deleteLineById(id: number){
+  
+    this.deletedElement = this.lines.find(e => e.id === id);
+    this.lineService.deleteLine(id).subscribe(() => {
+      
+      setTimeout(() => {
+        this.loadLines();
+      }, 500);
 
-    this.deletedElement = this.selectedItems.find(e => e.id === id);
-    this.selectedItems =  this.selectedItems.filter(e => e.id != id)
+      this.toastr.success("Successfully removed");
+    });
+  }
 
-    setTimeout( () => { 
-        this.lines = this.selectedItems;
-      } , 1000);
+  insertLine(line: any){
+    this.lineService.inserLine(line).subscribe(() => {
+      
+      setTimeout(() => {
+        this.loadLines();
+      }, 500);
 
-    // *********INSERT CODE HERE TO DELETE ITEMS FROM API***************
-    // this.employeService.deleteFromCart(id).subscribe((data:any)=>{
-    //   alert("Data deleted succefully");
-    //   this.getdata()
-    // })
+      this.toastr.success("Successfully added");
+    })
   }
 
   pageChanged(event: any){
@@ -110,10 +84,30 @@ export class LineListComponent implements OnInit {
     this.showChildTable = []; //stop showing all child table
   }
 
+  openDeleteModal(id: number){
+    this.bsModalRef = this.modalServeice.show(DeleteLineModalComponent);
+    this.bsModalRef.content.notifyParent.subscribe((result)=>{
+      if(result) this.deleteLineById(id);
+      console.log(result);   
+    })
+  }
+
+  openInsertModal(){
+    this.bsModalRef = this.modalServeice.show(InsertLineModalComponent, {animated: true, class: 'modal-lg'});
+    this.bsModalRef.content.notifyParent.subscribe((result) => {
+      //console.log(result.length);
+      //console.log(result);
+      this.insertLine(result);
+    })
+  }
+
   testClick(){
     console.log("Kliknięty element!!!!");
   }
-
+  //openModal(template: TemplateRef<any>) {
+   // this.bsModalRef = this.modalServeice.show(DeleteLineModalComponent);
+   // this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
+  //}
 
   //childTableToggle() {
     //console.log('register nav button');

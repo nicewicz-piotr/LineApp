@@ -62,28 +62,16 @@
               <button class="btn btn-outline-success"  
               (click)="registerFormToggle()">Register</button>
               
-              <!--
-              <button class="btn btn-outline-success" 
-              (click)="isCollapsed = !isCollapsed" 
-              [attr.aria-expanded]="!isCollapsed" 
-              aria-controls="collapseBasic">Register</button>
-              -->
             </div>
           </div>
         </div>
 
   </nav>
 
-  <div>
-    <app-register [(showForm)]="showRegisterForm" ></app-register>
+  <div  class="zippy-body" [@expandCollapse]="showRegisterForm ? 'expanded' : 'collapsed'" >     
+    <app-register [(showForm)]="showRegisterForm"></app-register>
   </div>
 
   <div>
     <router-outlet *ngIf="!showRegisterForm"></router-outlet>
   </div>
-
-   <!--
-  <div id="collapseBasic" [(collapse)]="isCollapsed" [isAnimated]="true">
-    <app-register ></app-register>
-  </div>
-  -->

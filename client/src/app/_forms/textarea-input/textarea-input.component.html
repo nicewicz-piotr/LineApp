@@ -1,0 +1,20 @@
+<div class="form-group position-relative">
+    <div class="form-floating mb-3">
+        
+        <textarea [class.is-invalid]="ngControl.invalid 
+            && ngControl.touched"
+            class="form-control mt-4 text-center" 
+            style="height: 100px"
+            [formControl]="ngControl.control"
+            placeholder={{label}}>
+        </textarea>
+
+        <label for="floatingInput">{{label}}
+        </label>
+
+        <div *ngIf="ngControl.control.errors?.required"
+            class="invalid-tooltip">
+            {{label}} is required.   
+        </div>
+    </div>
+</div>

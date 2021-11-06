@@ -22,6 +22,10 @@ import { ServerErrorComponent } from './errors/server-error/server-error.compone
 import { NotificationListComponent } from './lines/notification-list/notification-list.component';
 import { TextInputComponent } from './_forms/text-input/text-input.component';
 import { DateInputComponent } from './_forms/date-input/date-input.component';
+import { DeleteLineModalComponent } from './modals/delete-line-modal/delete-line-modal.component';
+import { InsertLineModalComponent } from './modals/insert-line-modal/insert-line-modal.component';
+import { NumberInputComponent } from './_forms/number-input/number-input.component';
+import { TextareaInputComponent } from './_forms/textarea-input/textarea-input.component'; 
 
 
 @NgModule({
@@ -37,7 +41,11 @@ import { DateInputComponent } from './_forms/date-input/date-input.component';
     ServerErrorComponent,
     NotificationListComponent,
     TextInputComponent,
-    DateInputComponent
+    DateInputComponent,
+    DeleteLineModalComponent,
+    InsertLineModalComponent,
+    NumberInputComponent,
+    TextareaInputComponent
   ],
   imports: [
     BrowserModule,

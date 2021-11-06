@@ -7,11 +7,17 @@ import { Line } from '../_models/line';
 import { LineParams } from '../_models/lineParams';
 import { PaginatedResult } from '../_models/pagination';
 
+/*
 const httpOptions = {
   headers: new HttpHeaders({
     Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token
   })
 }
+*/
+
+const headers = new HttpHeaders({
+  Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token
+});
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +37,9 @@ export class LinesService {
     console.log(Object.values(lineParams).join('-'));
     var response = this.lineCache.get(Object.values(lineParams).join('-'));
 
-    if(response){
-      return of(response);
-    }
+    //if(response){
+    //  return of(response);
+    //}
 
     let params = this.getPaginationHeaders(lineParams.pageNumber, lineParams.pageSize);
   
@@ -61,12 +67,13 @@ export class LinesService {
 
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
 
-    return this.http.get<T>(url, { observe: 'response', params }).pipe(
+    return this.http.get<T>(url,  { headers, observe: 'response', params }).pipe(
       map(response => {
         paginatedResult.result = response.body;
         if (response.headers.get('Pagination') !== null) {
           paginatedResult.pagination = JSON.parse(response.headers.get('Pagination')); //download from header and set properties of pagination interface
         }
+        //console.log(paginatedResult.result);
         return paginatedResult;
       })
     );
@@ -91,6 +98,15 @@ export class LinesService {
       return of(line);
     }
 
-    return this.http.get<Line>(this.baseUrl + 'lines/' + id, httpOptions);
+    return this.http.get<Line>(this.baseUrl + 'lines/' + id, { headers } /*httpOptions*/);
+  }
+
+  deleteLine(id: number){
+    return this.http.delete<Line>(this.baseUrl + 'lines/' + id, { headers } /*httpOptions*/);
+  }
+
+  inserLine(line: any){
+    //console.log(line);
+    return this.http.post(this.baseUrl + 'lines/', line,  { headers });
   }
 }

@@ -2,13 +2,17 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { expandCollapse } from '../_animations/expand-collapse';
 import { User } from '../_models/user';
 import { AccountService } from '../_services/account.service';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  styleUrls: ['./nav.component.css'],
+  animations: [  
+    expandCollapse
+  ]  
 })
 export class NavComponent implements OnInit {
 model: any = {}

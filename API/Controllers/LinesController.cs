@@ -69,7 +69,7 @@ namespace API.Controllers
         {
             AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
             
-            //if(user == null) return Unauthorized();
+            if(user == null) return Unauthorized();
 
             //if(string.IsNullOrEmpty(lineParams.LineSymbol)){}
             //    lineParams.LineSymbol = 

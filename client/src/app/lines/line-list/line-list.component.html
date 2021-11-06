@@ -1,4 +1,4 @@
-<div class="container mt-3">
+<div class="container mt-3 d-flex bg-secondary">
   <form #form="ngForm" class="form-inline mb-3" 
   (ngSubmit)="loadLines()" autocomplete="off">
       <div class="form-group">
@@ -26,6 +26,12 @@
     
     </div>
   </form>
+
+  <button class="btn btn-success mb-3 ml-auto" (click)="openInsertModal();">
+    <i class="fa fa-plus-square"  style="font-size:25px" aria-hidden="true"></i>
+  </button>
+
+
 </div>
 
 <div class="container">
@@ -72,7 +78,7 @@
           <i class="fa fa-eye" style="font-size:25px"></i>
         </button></td>
         
-        <td><button class="btn btn-danger" (click)="deleteFromCart(line.id)">
+        <td><button class="btn btn-danger" (click)="openDeleteModal(line.id);">
             <i class="fa fa-trash"  style="font-size:25px" aria-hidden="true"></i>
         </button></td>
       </tr>
