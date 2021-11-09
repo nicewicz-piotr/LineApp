@@ -25,7 +25,8 @@ import { DateInputComponent } from './_forms/date-input/date-input.component';
 import { DeleteLineModalComponent } from './modals/delete-line-modal/delete-line-modal.component';
 import { InsertLineModalComponent } from './modals/insert-line-modal/insert-line-modal.component';
 import { NumberInputComponent } from './_forms/number-input/number-input.component';
-import { TextareaInputComponent } from './_forms/textarea-input/textarea-input.component'; 
+import { TextareaInputComponent } from './_forms/textarea-input/textarea-input.component';
+import { SidebarComponent } from './sidebar/sidebar.component'; 
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { TextareaInputComponent } from './_forms/textarea-input/textarea-input.c
     DeleteLineModalComponent,
     InsertLineModalComponent,
     NumberInputComponent,
-    TextareaInputComponent
+    TextareaInputComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,

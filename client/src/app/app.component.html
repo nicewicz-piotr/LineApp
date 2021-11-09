@@ -6,5 +6,23 @@
 
 -->
 
-<app-nav></app-nav>
 
+
+
+<!--!!!!!!!!!!
+<app-nav></app-nav>
+-->
+
+
+
+<div>  
+    <app-sidebar (menuStateEvent)="toggleMenuState($event)" [@slideInOut]="menuState" ></app-sidebar>
+</div>
+
+<div  class="zippy-body" [@expandCollapse]="showRegisterForm ? 'expanded' : 'collapsed'" >     
+    <app-register [(showForm)]="showRegisterForm"></app-register>
+</div>
+  
+<div>
+    <router-outlet *ngIf="!showRegisterForm"></router-outlet>
+</div>

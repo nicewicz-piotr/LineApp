@@ -20,6 +20,7 @@ model: any = {}
 //currentUser$: Observable<User>;
 //loggedIn: boolean;
 showRegisterForm: boolean = false;
+navbarOpen: boolean = false;
 
 //@Output() showFormChange = new EventEmitter<boolean>();
 
@@ -57,6 +58,10 @@ constructor(public accountService: AccountService,
     this.showRegisterForm = !this.showRegisterForm;
     console.log(this.showRegisterForm);
     //this.showFormChange.emit(this.showRegisterForm);
+  }
+
+  toggleNavbar() {
+    this.navbarOpen = !this.navbarOpen;
   }
 
   //getCurrentUser(){

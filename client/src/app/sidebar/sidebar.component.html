@@ -1,0 +1,80 @@
+
+<div *ngIf="this.menuState === 'out'">
+    <button class="button positionedbutton" (click)="toggleMenu()" >
+        <span><i  class="fa fa-angle-double-left"></i></span>
+    </button>   
+</div>
+
+<div *ngIf="this.menuState === 'in'">
+    <button class="button" (click)="toggleMenu()" >
+        <span><i  class="fa fa-angle-double-right"></i></span>
+    </button>
+</div>
+
+<ul >
+
+  <li>
+    <div class="dropdown"  *ngIf="(accountService.currentUser$ | async) as user" dropdown>
+
+      <a  class="dropdown-toggle text-light" dropdownToggle>Welcome {{user.userName | titlecase}}</a>
+      <div class="dropdown-menu mt-3" *dropdownMenu>
+        <a href="#" class="dropdown-item" style="color: darkslategrey;">User Profile</a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item" (click)="logout()" style="color: darkslategrey;">Logout</a>
+      </div>
+    
+    </div>
+  </li>
+
+
+    <ng-container *ngIf="accountService.currentUser$ | async">
+        <li>
+          <a  routerLink='/lines' routerLinkActive='active'>Lines</a>
+        </li>
+        <li>
+          <a   href="#" routerLinkActive='active'>Notifications</a>
+        </li>
+        <li >
+          <a  href="#" routerLinkActive='active'>Photos</a>
+        </li>
+    </ng-container>
+
+    <li>
+      <a routerLink='/errors' routerLinkActive='active'>Errors</a>
+    </li>
+
+    
+</ul>
+
+
+
+<div class="btn-group" *ngIf="(accountService.currentUser$ | async) === null">
+<form  #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" 
+  autocomplete="off">
+  <input 
+      name="username"
+      [(ngModel)]="model.username"
+      class="form-control mr-2" 
+      type="text" 
+      placeholder="Username">
+  <input 
+      name="password"
+      [(ngModel)]="model.password"
+      class="form-control mr-2" 
+      type="password" 
+      placeholder="Password">
+  <button class="btn btn-outline-success" type="submit">Login</button>
+</form>
+
+
+<button class="btn btn-outline-success"  
+(click)="registerFormToggle()">Register</button>
+
+</div>
+
+
+
+
+
+
+

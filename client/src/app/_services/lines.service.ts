@@ -106,7 +106,6 @@ export class LinesService {
   }
 
   inserLine(line: any){
-    //console.log(line);
     return this.http.post(this.baseUrl + 'lines/', line,  { headers });
   }
 }
