@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Register</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="cancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="d-flex flex-row justify-content-center">
+        
+        <form [formGroup]='registerForm' (ngSubmit)="registerForm.valid && confirm()" autocomplete="off" class="col-lg" >
+            
+            <app-text-input [formControl]='registerForm.controls["userName"]' [label]='"Username"'></app-text-input>
+            <app-text-input [formControl]='registerForm.controls["password"]' [label]='"Password"' [type]='"password"'></app-text-input>
+            <app-text-input [formControl]='registerForm.controls["confirmPassword"]' [label]='"Confirm Password"' [type]='"password"'></app-text-input>
+            <app-text-input [formControl]='registerForm.controls["company"]' [label]='"Company"'></app-text-input>
+            <app-text-input [formControl]='registerForm.controls["phoneNumber"]' [label]='"Phone number"'></app-text-input>
+            <app-text-input [formControl]='registerForm.controls["email"]' [label]='"Email"'></app-text-input>
+            <app-text-input [formControl]='registerForm.controls["department"]' [label]='"Department"'></app-text-input>
+    
+            <div class="form-group text-center">
+                <button [disabled]="!registerForm.valid" class="btn btn-success mr-2" type="submit">Register</button>
+            </div>
+        </form>
+
+        <!--
+        <p>Form value: {{registerForm.value | json}}</p>
+        <p>Form status: {{registerForm.status | json}}</p>
+        -->
+    </div>
+</div>

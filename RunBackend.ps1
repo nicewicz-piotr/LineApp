@@ -1,2 +1,2 @@
-Set-Location C:\Users\Piotr\Documents\CSharp_projects\LineApp\API
+Set-Location API
 dotnet run

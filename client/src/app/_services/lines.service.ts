@@ -14,10 +14,11 @@ const httpOptions = {
   })
 }
 */
-
+/*
 const headers = new HttpHeaders({
   Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token
 });
+*/
 
 @Injectable({
   providedIn: 'root'
@@ -27,14 +28,24 @@ export class LinesService {
   lines: Line[] = [];
   lineCache = new Map();
   lineParams: LineParams;
+  
+  headers = new HttpHeaders({
+    Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token
+  });
 
   constructor(private http: HttpClient) { 
     this.lineParams = new LineParams();
   }
 
+  setAuthorizationHeader(): HttpHeaders{
+    return  new HttpHeaders({
+      Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token
+    });
+  }
+
   getLines(lineParams: LineParams){
 
-    console.log(Object.values(lineParams).join('-'));
+    //console.log(Object.values(lineParams).join('-'));
     var response = this.lineCache.get(Object.values(lineParams).join('-'));
 
     //if(response){
@@ -67,6 +78,8 @@ export class LinesService {
 
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>();
 
+    const headers = this.setAuthorizationHeader();
+
     return this.http.get<T>(url,  { headers, observe: 'response', params }).pipe(
       map(response => {
         paginatedResult.result = response.body;
@@ -98,14 +111,23 @@ export class LinesService {
       return of(line);
     }
 
+    const headers = this.setAuthorizationHeader();
+
     return this.http.get<Line>(this.baseUrl + 'lines/' + id, { headers } /*httpOptions*/);
   }
 
   deleteLine(id: number){
+
+    const headers = this.setAuthorizationHeader();
+
     return this.http.delete<Line>(this.baseUrl + 'lines/' + id, { headers } /*httpOptions*/);
   }
 
-  inserLine(line: any){
+  inserLine(line: Line){
+
+    const headers = this.setAuthorizationHeader();
+
+    localStorage.getItem('user');
     return this.http.post(this.baseUrl + 'lines/', line,  { headers });
   }
 }

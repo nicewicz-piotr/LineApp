@@ -1,7 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
-import { expandCollapse } from '../_animations/expand-collapse';
+import { LoginModalComponent } from '../modals/login-modal/login-modal.component';
+import { RegisterModalComponent } from '../modals/register-modal/register-modal.component';
+import { Login } from '../_models/login';
+import { Register } from '../_models/register';
 import { AccountService } from '../_services/account.service';
 
 @Component({
@@ -12,50 +16,68 @@ import { AccountService } from '../_services/account.service';
 export class SidebarComponent implements OnInit {
 
   @Output() menuStateEvent: EventEmitter<string> = new EventEmitter();
-  menuState: any = 'out';
-  
+  @Input() menuState: string;
 
-  model: any = {}
-  showRegisterForm: boolean = false;
-  navbarOpen: boolean = false;
+  bsModalRef: BsModalRef; 
   
-  constructor(public accountService: AccountService, private router: Router,
-    private toastr: ToastrService) { }
+  constructor(public accountService: AccountService,
+              private router: Router,
+              private toastr: ToastrService,
+              private modalServeice: BsModalService) { }
 
   ngOnInit(): void {
   }
 
   toggleMenu(){
-    this.menuState = this.menuState === 'in' ? 'out' : 'in';
-    //console.log(this.menuState);
+    this.menuState = this.menuState === 'out' ? 'in' : 'out';
     this.menuStateEvent.emit(this.menuState);
   }
 
-  login(){
-    //this.isCollapsed = true;
-    this.showRegisterForm = false;
+  login(model: Login){
     
-    this.accountService.login(this.model).subscribe(response => {
+    this.accountService.login(model).subscribe(response => {
       console.log(response);
-      this.router.navigateByUrl('/lines');
-      //this.loggedIn = true;
-    } /*, error => {
+      this.toastr.success("Successfully logged-in");
+      //this.router.navigateByUrl('/lines');
+    } , error => {
       console.log(error);
-      this.toastr.error(error.error);
-    }*/)
+      //this.toastr.error(error.error);
+    })
   }
 
   logout(){
     this.accountService.logout();
     this.router.navigateByUrl('/');
-    //this.loggedIn = false;
   }
 
-  registerFormToggle() {
-    console.log('register nav button');
-    this.showRegisterForm = !this.showRegisterForm;
-    console.log(this.showRegisterForm);
-    //this.showFormChange.emit(this.showRegisterForm);
+  register(model: Register){
+    this.accountService.register(model).subscribe(response => {
+      console.log(response);
+      //this.router.navigateByUrl('/');
+      this.toastr.success("Successfully registered");
+      //this.cancel();
+    }, error => {
+      console.log(error);
+      //this.validationErrors = error;
+      //this.toastr.error(error.error);
+    })
   }
+
+  openLoginModal(){
+    this.bsModalRef = this.modalServeice.show(LoginModalComponent, {animated: true, class: 'modal-lg'});
+    this.bsModalRef.content.notifyParent.subscribe((result: Login) => {
+      console.log(result);
+      this.login(result);
+    })
+  }
+
+  openRegisterModal(){
+    this.bsModalRef = this.modalServeice.show(RegisterModalComponent, {animated: true, class: 'modal-lg'});
+    this.bsModalRef.content.notifyParent.subscribe((result: Register) => {
+      console.log(result);
+      this.register(result);
+    })
+  }
+
 
 }

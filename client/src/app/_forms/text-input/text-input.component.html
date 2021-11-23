@@ -10,10 +10,10 @@
         <label for="floatingInput">{{label}}
         </label>
 
-        <div *ngIf="ngControl.control.errors?.required"
-            class="invalid-tooltip">
-            {{label}} is required.   
-        </div>
+    <div *ngIf="ngControl.control.errors?.required"
+        class="invalid-tooltip">
+        {{label}} is required.   
+    </div>
      
     <div *ngIf="ngControl.control.errors?.minlength"
         class="invalid-tooltip">
@@ -38,6 +38,11 @@
     <div *ngIf="ngControl.control.errors?.pattern && !ngControl.control.errors?.minlength"
         class="invalid-tooltip">
         Password must have at least one lowercase and one uppercase
+    </div>
+
+    <div *ngIf="ngControl.control.errors?.pattern"
+        class="invalid-tooltip">
+        The phone number must be at least 6 digits without letters
     </div>
 
 </div>

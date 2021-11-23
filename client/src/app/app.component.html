@@ -1,28 +1,22 @@
 <!--
-<app-nav (showFormChange)="showForm"></app-nav>
-<div>
-    <router-outlet *ngIf="!showForm"></router-outlet>
-</div>
-
--->
-
-
-
-
-<!--!!!!!!!!!!
 <app-nav></app-nav>
 -->
 
+<!--
+    [menuState]="menuState" - send value to child component
+     (menuStateEvent)="toggleMenuState($event)" - get value from child component
+-->
 
 
 <div>  
-    <app-sidebar (menuStateEvent)="toggleMenuState($event)" [@slideInOut]="menuState" ></app-sidebar>
-</div>
-
-<div  class="zippy-body" [@expandCollapse]="showRegisterForm ? 'expanded' : 'collapsed'" >     
-    <app-register [(showForm)]="showRegisterForm"></app-register>
+    <app-sidebar 
+        [menuState]="menuState" 
+        (menuStateEvent)="toggleMenuState($event)" 
+        [@slideInOut]="menuState"
+        clickOutside (clickOutside)="closeMenu()">
+    </app-sidebar>
 </div>
   
 <div>
-    <router-outlet *ngIf="!showRegisterForm"></router-outlet>
+    <router-outlet></router-outlet>
 </div>

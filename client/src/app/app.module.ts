@@ -26,7 +26,10 @@ import { DeleteLineModalComponent } from './modals/delete-line-modal/delete-line
 import { InsertLineModalComponent } from './modals/insert-line-modal/insert-line-modal.component';
 import { NumberInputComponent } from './_forms/number-input/number-input.component';
 import { TextareaInputComponent } from './_forms/textarea-input/textarea-input.component';
-import { SidebarComponent } from './sidebar/sidebar.component'; 
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { LoginModalComponent } from './modals/login-modal/login-modal.component';
+import { RegisterModalComponent } from './modals/register-modal/register-modal.component'; 
+import { ClickOutsideDirective } from './ClickOutsideDirective';
 
 
 @NgModule({
@@ -47,7 +50,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     InsertLineModalComponent,
     NumberInputComponent,
     TextareaInputComponent,
-    SidebarComponent
+    SidebarComponent,
+    LoginModalComponent,
+    RegisterModalComponent,
+    ClickOutsideDirective
   ],
   imports: [
     BrowserModule,

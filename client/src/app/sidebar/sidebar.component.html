@@ -1,17 +1,12 @@
 
-<div *ngIf="this.menuState === 'out'">
-    <button class="button positionedbutton" (click)="toggleMenu()" >
-        <span><i  class="fa fa-angle-double-left"></i></span>
-    </button>   
-</div>
+<button class="button positionedbutton" (click)="toggleMenu()" >
+    <span><i  class="fa fa-angle-double-left" 
+    [ngStyle]="menuState === 'out' ? 
+    {'transform': 'rotate(0deg)'} :
+    {'transform': 'rotate(180deg)'}"></i></span>
+</button>   
 
-<div *ngIf="this.menuState === 'in'">
-    <button class="button" (click)="toggleMenu()" >
-        <span><i  class="fa fa-angle-double-right"></i></span>
-    </button>
-</div>
-
-<ul >
+<ul>
 
   <li>
     <div class="dropdown"  *ngIf="(accountService.currentUser$ | async) as user" dropdown>
@@ -34,9 +29,18 @@
         <li>
           <a   href="#" routerLinkActive='active'>Notifications</a>
         </li>
-        <li >
+        <li>
           <a  href="#" routerLinkActive='active'>Photos</a>
         </li>
+    </ng-container>
+
+    <ng-container *ngIf="(accountService.currentUser$ | async) === null">
+      <li>
+        <a style="cursor: pointer" (click)="openLoginModal();">Login</a>
+      </li>
+      <li>
+        <a style="cursor: pointer" (click)="openRegisterModal();">Register</a>
+      </li>
     </ng-container>
 
     <li>
@@ -45,36 +49,3 @@
 
     
 </ul>
-
-
-
-<div class="btn-group" *ngIf="(accountService.currentUser$ | async) === null">
-<form  #loginForm="ngForm" class="d-flex" (ngSubmit)="login()" 
-  autocomplete="off">
-  <input 
-      name="username"
-      [(ngModel)]="model.username"
-      class="form-control mr-2" 
-      type="text" 
-      placeholder="Username">
-  <input 
-      name="password"
-      [(ngModel)]="model.password"
-      class="form-control mr-2" 
-      type="password" 
-      placeholder="Password">
-  <button class="btn btn-outline-success" type="submit">Login</button>
-</form>
-
-
-<button class="btn btn-outline-success"  
-(click)="registerFormToggle()">Register</button>
-
-</div>
-
-
-
-
-
-
-

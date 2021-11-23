@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Login</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="cancel()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="d-flex flex-row justify-content-center">
+        
+        <form [formGroup]='loginForm' (ngSubmit)="loginForm.valid && confirm()" autocomplete="off" class="col-lg" >
+            
+            <app-text-input [formControl]='loginForm.controls["username"]' [label]='"Username"'></app-text-input>
+            <app-text-input [formControl]='loginForm.controls["password"]' [label]='"Password"' type="password"></app-text-input>
+    
+            <div class="form-group text-center">
+                <button [disabled]="!loginForm.valid" class="btn btn-success mr-2" type="submit">Login</button>
+            </div>
+        </form>
+
+        <!--
+        <p>Form value: {{loginForm.value | json}}</p>
+        <p>Form status: {{loginForm.status | json}}</p>
+        -->
+    </div>
+</div>

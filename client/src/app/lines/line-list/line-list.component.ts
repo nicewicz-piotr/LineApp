@@ -1,6 +1,4 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit, TemplateRef } from '@angular/core';
-//import { Console } from 'console';
 import { expandCollapse } from 'src/app/_animations/expand-collapse';
 import { deleteItem } from 'src/app/_animations/delete-Item';
 
@@ -66,7 +64,7 @@ export class LineListComponent implements OnInit {
     });
   }
 
-  insertLine(line: any){
+  insertLine(line: Line){
     this.lineService.inserLine(line).subscribe(() => {
       
       setTimeout(() => {
@@ -85,8 +83,8 @@ export class LineListComponent implements OnInit {
   }
 
   openDeleteModal(id: number){
-    this.bsModalRef = this.modalServeice.show(DeleteLineModalComponent);
-    this.bsModalRef.content.notifyParent.subscribe((result)=>{
+    this.bsModalRef = this.modalServeice.show(DeleteLineModalComponent, {animated: true});
+    this.bsModalRef.content.notifyParent.subscribe((result: boolean)=>{
       if(result) this.deleteLineById(id);
       console.log(result);   
     })
@@ -94,8 +92,7 @@ export class LineListComponent implements OnInit {
 
   openInsertModal(){
     this.bsModalRef = this.modalServeice.show(InsertLineModalComponent, {animated: true, class: 'modal-lg'});
-    this.bsModalRef.content.notifyParent.subscribe((result) => {
-      //console.log(result.length);
+    this.bsModalRef.content.notifyParent.subscribe((result: Line) => {
       //console.log(result);
       this.insertLine(result);
     })
@@ -104,15 +101,4 @@ export class LineListComponent implements OnInit {
   testClick(){
     console.log("Kliknięty element!!!!");
   }
-  //openModal(template: TemplateRef<any>) {
-   // this.bsModalRef = this.modalServeice.show(DeleteLineModalComponent);
-   // this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
-  //}
-
-  //childTableToggle() {
-    //console.log('register nav button');
-    //this.showChildTable = !this.showChildTable;
-    //console.log(this.showChildTable);
-    //this.showFormChange.emit(this.showRegisterForm);
-  //}
 }
