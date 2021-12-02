@@ -12,6 +12,7 @@ export class TextInputComponent implements ControlValueAccessor {
 
   constructor(@Self() public ngControl: NgControl) { 
     this.ngControl.valueAccessor = this;
+    console.log(ngControl);
   }
 
   writeValue(obj: any): void {

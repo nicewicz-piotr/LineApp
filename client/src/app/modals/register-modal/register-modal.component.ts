@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -38,8 +38,8 @@ export class RegisterModalComponent implements OnInit {
         Validators.maxLength(10), Validators.pattern(/(?=.*[a-z])(?=.*[A-Z])/)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]],
       company: ['', Validators.required],
-      phoneNumber: ['', [Validators.required, Validators.pattern('[- +()0-9]{6,}')]],
-      //phoneNumber: ['', [Validators.required, this.regexValidator(new RegExp('[- +()0-9]{6,}'), {'phone': ''})]],
+      //phoneNumber: ['', [Validators.required, Validators.pattern('[- +()0-9]{6,}')]],
+      phoneNumber: ['', [Validators.required, this.regexValidator(new RegExp('[- +()0-9]{6,}'), {'phone': null})]],
       email: ['', [Validators.required, Validators.email]],
       department: ['', Validators.required]
     })

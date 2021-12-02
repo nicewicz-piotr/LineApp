@@ -1,129 +1,113 @@
-<div class="container mt-3 d-flex bg-secondary">
-  <form #form="ngForm" class="form-inline mb-3" 
-  (ngSubmit)="loadLines()" autocomplete="off">
-      <div class="form-group">
-        <label>Search by: </label>
-        <input type="text" 
-        class="form-control ml-1" 
-        style="width: 200px;" name="search" 
-        [(ngModel)]="lineParams.searchText"
-        placeholder={{lineParams.searchBy}}>
-  
-    <button class="btn btn-outline-secondary btn-sm ml-1"
-     type="submit"><i class="fa fa-search"></i>
-    </button>
+<div class="d-flex flex-wrap">
+    <div class="container mt-3  bg-secondary">
+        <form #form="ngForm" class="form-inline mb-1" (ngSubmit)="loadLines()" autocomplete="off">
+            <div class="form-group">
 
-    <div>
-      <select class="form-select ml-1"
-       id="Select1"
-        name='searchBy'
-         [(ngModel)]="lineParams.searchBy">
-        <option *ngFor="let searchOption of lineParams.searchListOptions">
-          {{searchOption}}
-        </option> 
-      </select>
+                <label>Search by: </label>
+
+                <div class="m-1" id="Select1">
+                    <select class="form-select " id="Select1" name='searchBy' [(ngModel)]="lineParams.searchBy">
+                        <option *ngFor="let searchOption of lineParams.searchListOptions">
+                            {{searchOption}}
+                        </option> 
+                    </select>
+                </div>
+
+                <div class="input-group-prepend">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm m-1" id="btnGroupAddon">
+                        <i class="fa fa-search"></i>
+                    </button>
+
+
+                    <input type="text" [(ngModel)]="lineParams.searchText" placeholder={{lineParams.searchBy}} name="search" class="form-control m-1">
+                </div>
+
+            </div>
+        </form>
+
+        <div class="input-group ml-auto">
+
+            <button class="btn btn-success ml-auto" (click)="openInsertModal();">
+                <i class="fa fa-plus-square"  style="font-size:25px" ></i>
+            </button>
+
+        </div>
     </div>
-    
-    </div>
-  </form>
-
-  <button class="btn btn-success mb-3 ml-auto" (click)="openInsertModal();">
-    <i class="fa fa-plus-square"  style="font-size:25px" aria-hidden="true"></i>
-  </button>
-
-
 </div>
 
 <div class="container">
-<table class="table table-sm mt-4">
-    <thead>
-      <tr>
-        <th scope="col" *ngFor="let index of headerArray; ">
-          <button   class="btn btn-secondary" 
-            (click)="loadLines(); 
-            toggleSort[index] = !toggleSort[index]"
-            name='orderBy'
-            [btnRadio]="toggleSort[index] ?
-            lineParams.orderByListAsc[index] : 
-            lineParams.orderByListDesc[index]"
-            [(ngModel)]="lineParams.orderBy">
-            {{lineParams.headerTableNames[index]}}
-          </button>  
-        </th>
-        <th class="col-sm-1"></th>
-        <th class="col-sm-1"></th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let line of lines; let i=index; let element">
-     
-      <tr class="table-light"  
-          [@deleteItem]="element == deletedElement ? 'collapsed' : 'expanded'">
-        <td> 
-          <button class="btn btn-outline-secondary rounded-circle btn-sm" 
-          [ngClass]="{'active': showChildTable[i]}" 
-          (click)="showChildTable[i] = !showChildTable[i]" >
+    <table class="table table-sm mt-4">
+        <thead>
+            <tr>
+                <th scope="col" *ngFor="let index of headerArray; ">
+                    <button class="btn btn-secondary" (click)="loadLines(); 
+                        toggleSort[index] = !toggleSort[index]" name='orderBy' [btnRadio]="toggleSort[index] ?
+                        lineParams.orderByListAsc[index] : 
+                        lineParams.orderByListDesc[index]" [(ngModel)]="lineParams.orderBy">
+                        {{lineParams.headerTableNames[index]}}
+                    </button>
+                </th>
+                <th class="col-sm-1 offscreen"></th>
+                <th class="col-sm-1 offscreen"></th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let line of lines; let i=index; let element">
+
+            <tr class="table-light" [@deleteItem]="element == deletedElement ? 'collapsed' : 'expanded'">
+                <td class="parent-tab">
+                    <button class="btn btn-outline-secondary rounded-circle btn-sm" [ngClass]="{'active': showChildTable[i]}" (click)="showChildTable[i] = !showChildTable[i]">
           
-          <i style="font-size:20px" class="fa fa-angle-double-down" 
-          [ngStyle]="showChildTable[i] ? 
-          {'transform': 'rotate(0deg)'} :
-          {'transform': 'rotate(90deg)'}" ></i>
-          
-          </button>
-        </td>
-        <td>{{line.id}}</td>
-        <td>{{line.symbol}}</td>
-        <td>{{line.length}} km</td>
-        
-        <td><button class="btn btn-secondary">
+                        <i style="font-size:20px" class="fa fa-angle-double-down" 
+                            [ngStyle]="showChildTable[i] ? 
+                            {'transform': 'rotate(0deg)'} :
+                            {'transform': 'rotate(90deg)'}" >
+                        </i>
+                    </button>
+                </td>
+                <td class="parent-tab">{{line.id}}</td>
+                <td class="parent-tab">{{line.symbol}}</td>
+                <td class="parent-tab">{{line.length}} km</td>
+
+                <td><button class="btn btn-secondary">
           <i class="fa fa-eye" style="font-size:25px"></i>
         </button></td>
-        
-        <td><button class="btn btn-danger" (click)="openDeleteModal(line.id);">
+
+                <td><button class="btn btn-danger" (click)="openDeleteModal(line.id);">
             <i class="fa fa-trash"  style="font-size:25px" aria-hidden="true"></i>
         </button></td>
-      </tr>
-      
-      <tr>
-        <td colspan="5">
-          <div  class="zippy-body" [@expandCollapse]="showChildTable[i] ? 'expanded' : 'collapsed'" >     
-            <app-notification-list [line]="line"></app-notification-list>
-          </div>
-        </td>
-      </tr>
-      
-    </tbody>
- </table>
-</div>
+            </tr>
 
-<div class="d-flex justify-content-center pagination pagination-lg" *ngIf="pagination">
-  <pagination 
-  [totalItems]="pagination.totalItems"
-  [itemsPerPage]="pagination.itemsPerPage"
-  [(ngModel)]="pagination.currentPage" 
-  (numPages)="smallnumPages = $event"
-  (pageChanged)="pageChanged($event)"
-  >
+            <tr>
+                <td colspan="6">
+                    <div>
 
-  </pagination> 
-  <!--
-    <pre class="card card-block card-header mb-3">
-    The selected page no: {{pagination.currentPage}}/{{smallnumPages}}
-  </pre>
-  -->
-  <div class="alert alert-dismissible alert-light">
-    selected page no: {{pagination.currentPage}} from {{pagination.totalPages}}
-  </div>
+                        <div class="zippy-body" [@expandCollapse]="showChildTable[i] ? 'expanded' : 'collapsed'">
+                            <app-notification-list [line]="line"></app-notification-list>
+                        </div>
 
-  <div>
-    <select class="form-select ml-1"
-     id="Select2"
-      name='pageSize'
-      (change)="loadLines()"
-       [(ngModel)]="lineParams.pageSize">
-      <option value='5'>5</option>
-      <option value='10'>10</option> 
-    </select>
-  </div>
+                    </div>
+                </td>
+            </tr>
 
+        </tbody>
+    </table>
 
+    <div class="d-sm-flex flex-sm-row justify-content-center">
+
+        <div class="pagination pagination-lg flex-wrap" *ngIf="pagination">
+            <pagination class="flex-wrap" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage" (numPages)="smallnumPages = $event" (pageChanged)="pageChanged($event)">
+            </pagination>
+
+            <div class="alert alert-dismissible alert-light">
+                selected page no: {{pagination.currentPage}} from {{pagination.totalPages}}
+            </div>
+
+            <div class="m-1" id="Select2">
+                <select class="form-select ml-1" name='pageSize' (change)="loadLines()" [(ngModel)]="lineParams.pageSize">
+                    <option value='5'>5</option>
+                    <option value='10'>10</option> 
+                </select>
+            </div>
+        </div>
+    </div>
 </div>

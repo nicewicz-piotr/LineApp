@@ -40,10 +40,14 @@
         Password must have at least one lowercase and one uppercase
     </div>
 
-    <div *ngIf="ngControl.control.errors?.pattern"
+    
+    <!--<div *ngIf="ngControl.control.errors['phone']"
+        class="invalid-tooltip">-->
+    <div *ngIf="ngControl.control.hasError('phone')"
         class="invalid-tooltip">
         The phone number must be at least 6 digits without letters
     </div>
-
+    
+    
 </div>
 </div>

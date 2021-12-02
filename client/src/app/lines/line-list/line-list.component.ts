@@ -14,6 +14,7 @@ import { InsertLineModalComponent } from 'src/app/modals/insert-line-modal/inser
 @Component({
   selector: 'app-line-list',
   templateUrl: './line-list.component.html',
+  styleUrls: ['./line-list.component.css'],
 
 animations: [  
   expandCollapse,
