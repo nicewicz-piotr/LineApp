@@ -1,1 +1,33 @@
-<p>line-detail works!</p>
+<button class="btn btn-outline-primary mr-3"routerLink="/lines">Return</button>
+
+<div *ngIf="line" class="container">
+
+  <button class="btn btn-info" (click)="openEditModal(line.id);">
+    <i class="fa fa-edit"  style="font-size:25px" aria-hidden="true"></i>
+  </button>
+
+<div class="row">
+
+<div class="col-md-4">
+  <h3>Line Details Page</h3>
+  <h4>Line Id: {{line.id}}</h4>
+
+  <h4>Line symbol: {{line.symbol}}</h4>
+  <h4>Line length: {{line.length}} km</h4>
+  <h4>Line description:</h4> {{line.description}}
+</div>
+
+<div class="col-md-8">
+    <tabset>
+      <tab heading="Notifications" id="tab1">
+        <app-notification-list [line]="line">
+        </app-notification-list>
+      </tab>
+      <tab heading="Basic Title 1">Basic content 1</tab>
+      <tab heading="Basic Title 2">Basic content 2</tab>
+    </tabset>
+  </div>
+
+</div>
+
+</div>

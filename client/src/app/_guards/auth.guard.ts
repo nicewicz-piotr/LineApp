@@ -1,3 +1,4 @@
+import { isNull } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -17,10 +18,30 @@ export class AuthGuard implements CanActivate {
   canActivate(): Observable<boolean>  {
     return this.accountService.currentUser$.pipe(
       map(user => {
-        if(user) return true;
+        //console.log("Czy token wygasł: ", this.tokenExpired( user.token))
+        
+        //this.getDecodedToken(user.token)
+        console.log("auth guard")
+
+        if(this.tokenExpired(user?.token))
+          this.accountService.logout();
+        
+        if(user && !this.tokenExpired(user?.token)) return true; //add condition to expiring token
         this.toastr.error('No access');
       })
     )
+  }
+
+  private tokenExpired(token: string| null) {
+    if(token == null) return false;
+    else {
+      const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+      return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+    }
+  }
+
+  getDecodedToken(token){
+    return JSON.parse(atob(token.split('.')[1]));
   }
   
 }

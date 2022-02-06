@@ -68,7 +68,7 @@
                 <td class="parent-tab">{{line.symbol}}</td>
                 <td class="parent-tab">{{line.length}} km</td>
 
-                <td><button class="btn btn-secondary">
+                <td><button routerLink='/lines/{{line.id}}' class="btn btn-secondary">
           <i class="fa fa-eye" style="font-size:25px"></i>
         </button></td>
 
@@ -80,11 +80,9 @@
             <tr>
                 <td colspan="6">
                     <div>
-
                         <div class="zippy-body" [@expandCollapse]="showChildTable[i] ? 'expanded' : 'collapsed'">
                             <app-notification-list [line]="line"></app-notification-list>
                         </div>
-
                     </div>
                 </td>
             </tr>

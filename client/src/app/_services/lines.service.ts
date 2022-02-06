@@ -102,19 +102,31 @@ export class LinesService {
   }
 
   getLine(id: number){
-    console.log(this.lineCache);
+    //console.log(this.lineCache);
     const line = [...this.lineCache.values()]
     .reduce((arr, elem) => arr.concat(elem.result), [])
     .find((line: Line) => line.id === id);
 
-    if(line){
-      return of(line);
-    }
+    //if(line){
+    //  return of(line);
+    //}
 
     const headers = this.setAuthorizationHeader();
 
     return this.http.get<Line>(this.baseUrl + 'lines/' + id, { headers } /*httpOptions*/);
   }
+
+  updateLine(line: Line){
+    const headers = this.setAuthorizationHeader();
+
+    return this.http.put(this.baseUrl + 'lines/', line, { headers }).pipe(
+      map(() => {
+        const index = this.lines.indexOf(line);
+        this.lines[index] = line;
+      })
+    )
+  }
+
 
   deleteLine(id: number){
 

@@ -54,7 +54,7 @@ namespace API.Data
                 UserName = "admin",
                 Department = "XXX",
                 Company = "Phizer",
-                Email = "admin@admin.gmail.com",
+                Email = "nicewicz.piotr@gmail.com",
                 PhoneNumber = "99922555"
             };
 

@@ -30,6 +30,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { LoginModalComponent } from './modals/login-modal/login-modal.component';
 import { RegisterModalComponent } from './modals/register-modal/register-modal.component'; 
 import { ClickOutsideDirective } from './ClickOutsideDirective';
+import { EditLineModalComponent } from './modals/edit-line-modal/edit-line-modal.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { ClickOutsideDirective } from './ClickOutsideDirective';
     SidebarComponent,
     LoginModalComponent,
     RegisterModalComponent,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    EditLineModalComponent
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DeleteLineModalComponent } from 'src/app/modals/delete-line-modal/delete-line-modal.component';
 import { InsertLineModalComponent } from 'src/app/modals/insert-line-modal/insert-line-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-line-list',
@@ -35,7 +36,8 @@ export class LineListComponent implements OnInit {
   
   constructor(private lineService: LinesService, 
               private toastr: ToastrService, 
-              private modalServeice: BsModalService) {
+              private modalService: BsModalService,
+              private router: Router) {
     this.lineParams = this.lineService.getLineParams();
     this.headerArray =  Array.from(Array(this.lineParams.headerTableNames.length).keys());
   }
@@ -43,6 +45,14 @@ export class LineListComponent implements OnInit {
   ngOnInit(): void {
     this.loadLines();
   }
+
+  /*
+  loadLine(id: number){
+    this.lineService.getLine(id).subscribe(response => {
+      this.router.navigateByUrl('/');
+    });
+  }
+  */
 
   loadLines(){
     this.lineService.setLineParams(this.lineParams);
@@ -84,7 +94,7 @@ export class LineListComponent implements OnInit {
   }
 
   openDeleteModal(id: number){
-    this.bsModalRef = this.modalServeice.show(DeleteLineModalComponent, {animated: true});
+    this.bsModalRef = this.modalService.show(DeleteLineModalComponent, {animated: true});
     this.bsModalRef.content.notifyParent.subscribe((result: boolean)=>{
       if(result) this.deleteLineById(id);
       console.log(result);   
@@ -92,7 +102,7 @@ export class LineListComponent implements OnInit {
   }
 
   openInsertModal(){
-    this.bsModalRef = this.modalServeice.show(InsertLineModalComponent, {animated: true, class: 'modal-lg'});
+    this.bsModalRef = this.modalService.show(InsertLineModalComponent, {animated: true, class: 'modal-lg'});
     this.bsModalRef.content.notifyParent.subscribe((result: Line) => {
       //console.log(result);
       this.insertLine(result);

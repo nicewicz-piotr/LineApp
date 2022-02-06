@@ -1,0 +1,38 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Edit Line</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="cancel()">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <div class="d-flex flex-row justify-content-center">
+      
+      <form [formGroup]='insertLineForm' (ngSubmit)="insertLineForm.valid && confirm()" autocomplete="off" class="col-lg" >
+          
+          <app-text-input [formControl]='insertLineForm.controls["symbol"]' [label]='"Symbol"'></app-text-input>
+          <app-number-input [formControl]='insertLineForm.controls["length"]' [label]='"Length"' ></app-number-input>
+          <app-textarea-input [formControl]='insertLineForm.controls["description"]' [label]='"Description"' ></app-textarea-input>
+  
+          <!--
+          <app-date-input [formControl]='registerForm.controls["somedate"]' [label]='"Date"'></app-date-input>
+          -->
+  
+          <div class="form-group text-center">
+              <button [disabled]="!insertLineForm.valid" class="btn btn-success mr-2" type="submit">Submit</button>
+              <!--<button class="btn btn-default mr-2" (click)="cancel()" type="button">Cancel</button>-->
+          </div>
+      </form>
+
+      <!--
+      <p>Form value: {{registerForm.value | json}}</p>
+      <p>Form status: {{registerForm.status | json}}</p>
+      -->
+  </div>
+  <!--    
+  <p>Do you want to confirm?</p>
+  <button type="button" class="btn btn-default" (click)="confirm()" >Yes</button>
+  <button type="button" class="btn btn-primary" (click)="cancel()" >No</button>
+  -->
+</div>
+
