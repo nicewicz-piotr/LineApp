@@ -31,6 +31,8 @@ import { LoginModalComponent } from './modals/login-modal/login-modal.component'
 import { RegisterModalComponent } from './modals/register-modal/register-modal.component'; 
 import { ClickOutsideDirective } from './ClickOutsideDirective';
 import { EditLineModalComponent } from './modals/edit-line-modal/edit-line-modal.component';
+import { ForgotPasswordModalComponent } from './modals/forgot-password-modal/forgot-password-modal.component';
+import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
 
 
 @NgModule({
@@ -55,7 +57,9 @@ import { EditLineModalComponent } from './modals/edit-line-modal/edit-line-modal
     LoginModalComponent,
     RegisterModalComponent,
     ClickOutsideDirective,
-    EditLineModalComponent
+    EditLineModalComponent,
+    ForgotPasswordModalComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     BrowserModule,

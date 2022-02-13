@@ -20,10 +20,10 @@ export class SidebarComponent implements OnInit {
 
   bsModalRef: BsModalRef; 
   
-  constructor(public accountService: AccountService,
+  constructor(public accountService: AccountService, //private??
               private router: Router,
               private toastr: ToastrService,
-              private modalServeice: BsModalService) { }
+              private modalService: BsModalService) { }
 
   ngOnInit(): void {
   }
@@ -64,7 +64,7 @@ export class SidebarComponent implements OnInit {
   }
 
   openLoginModal(){
-    this.bsModalRef = this.modalServeice.show(LoginModalComponent, {animated: true, class: 'modal-lg'});
+    this.bsModalRef = this.modalService.show(LoginModalComponent, {animated: true, class: 'modal-lg'});
     this.bsModalRef.content.notifyParent.subscribe((result: Login) => {
       console.log(result);
       this.login(result);
@@ -72,7 +72,7 @@ export class SidebarComponent implements OnInit {
   }
 
   openRegisterModal(){
-    this.bsModalRef = this.modalServeice.show(RegisterModalComponent, {animated: true, class: 'modal-lg'});
+    this.bsModalRef = this.modalService.show(RegisterModalComponent, {animated: true, class: 'modal-lg'});
     this.bsModalRef.content.notifyParent.subscribe((result: Register) => {
       console.log(result);
       this.register(result);
