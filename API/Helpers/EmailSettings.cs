@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace API.Configurations
+namespace API.Helpers
 {
-    public class EmailConfiguration
+    public class EmailSettings
     {
         public string From { get; set; }
         public string SmtpServer { get; set; }

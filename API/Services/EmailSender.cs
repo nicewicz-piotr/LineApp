@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
 using System.Threading.Tasks;
-using API.Configurations;
+//using API.Configurations;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using MailKit.Net.Smtp;
 using MimeKit;
@@ -13,8 +14,8 @@ namespace API.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly EmailConfiguration _emailConfig;
-        public EmailService(EmailConfiguration emailConfig)
+        private readonly EmailSettings _emailConfig;
+        public EmailService(EmailSettings emailConfig)
         {
             _emailConfig = emailConfig;
         }

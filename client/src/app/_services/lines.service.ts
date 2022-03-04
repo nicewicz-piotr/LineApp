@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Line } from '../_models/line';
 import { LineParams } from '../_models/lineParams';
 import { PaginatedResult } from '../_models/pagination';
+import { Notification } from "../_models/notification";
 
 /*
 const httpOptions = {
@@ -142,4 +143,12 @@ export class LinesService {
     localStorage.getItem('user');
     return this.http.post(this.baseUrl + 'lines/', line,  { headers });
   }
+
+  insertNotification(notification: Notification){
+    const headers = this.setAuthorizationHeader();
+
+    return this.http.post<Notification>(this.baseUrl + 'lines/add-notification', notification, { headers } /*httpOptions*/);
+  }
+
+
 }

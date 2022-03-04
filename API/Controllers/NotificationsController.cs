@@ -27,7 +27,7 @@ namespace API.Controllers
             _photoService = photoService;
         }
 
-        [HttpGet("{id}")] 
+        [HttpGet("{id}", Name = "GetNotification")] 
         public async Task<ActionResult<NotificationDto>> GetNotificationAsync(int id)
         {
             AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
@@ -112,10 +112,10 @@ namespace API.Controllers
 
             if (await _unitOfWork.Complete())
             {
-                return _mapper.Map<PhotoDto>(photo);
+                //return _mapper.Map<PhotoDto>(photo);
                 //return CreatedAtRoute("GetUser", _mapper.Map<PhotoDto>(photo));
                 //return CreatedAtRoute("GetUser", new { username = user.UserName }, _mapper.Map<PhotoDto>(photo));
-                //return CreatedAtRoute("GetNotification", new { notification = notification.Id }, _mapper.Map<PhotoDto>(photo));
+                return CreatedAtRoute("GetNotification", new { id = notification.Id }, _mapper.Map<PhotoDto>(photo));
             }
 
             return BadRequest("Problem adding photo");

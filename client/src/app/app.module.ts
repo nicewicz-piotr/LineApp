@@ -33,6 +33,8 @@ import { ClickOutsideDirective } from './ClickOutsideDirective';
 import { EditLineModalComponent } from './modals/edit-line-modal/edit-line-modal.component';
 import { ForgotPasswordModalComponent } from './modals/forgot-password-modal/forgot-password-modal.component';
 import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
+import { InsertNotificationModalComponent } from './modals/insert-notification-modal/insert-notification-modal.component';
+import { PhotoEditorComponent } from './notifications/photo-editor/photo-editor.component';
 
 
 @NgModule({
@@ -60,6 +62,8 @@ import { ResetPasswordComponent } from './resetpassword/resetpassword.component'
     EditLineModalComponent,
     ForgotPasswordModalComponent,
     ResetPasswordComponent,
+    InsertNotificationModalComponent,
+    PhotoEditorComponent,
   ],
   imports: [
     BrowserModule,

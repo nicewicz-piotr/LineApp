@@ -1,21 +1,36 @@
-<button class="btn btn-outline-primary mr-3"routerLink="/lines">Return</button>
-
 <div *ngIf="line" class="container">
 
-  <button class="btn btn-info" (click)="openEditModal(line.id);">
-    <i class="fa fa-edit"  style="font-size:25px" aria-hidden="true"></i>
+  <div class="d-flex m-3">
+  <button class="btn btn-outline-primary "routerLink="/lines">Return</button>
+
+  <button class="btn btn-success ml-auto" (click)="openInsertNotificationModal();">
+    <i class="fa fa-plus-square"  style="font-size:25px" ></i>
   </button>
+
+</div>
 
 <div class="row">
 
 <div class="col-md-4">
-  <h3>Line Details Page</h3>
-  <h4>Line Id: {{line.id}}</h4>
 
-  <h4>Line symbol: {{line.symbol}}</h4>
-  <h4>Line length: {{line.length}} km</h4>
-  <h4>Line description:</h4> {{line.description}}
+  <div class="card bg-secondary mb-3">
+    <div class="card-header">Line Details</div>
+    <div class="card-body">
+      <h4 class="card-title">Line Id: {{line.id}}</h4>
+      <h4 class="card-title">Line symbol: {{line.symbol}}</h4>
+      <h4 class="card-title">Line length: {{line.length}} km</h4>
+      <h4 class="card-title">Line description:</h4> <p class="card-text">{{line.description}}</p>
+    </div>
+  </div>
+
+  <div class="m-3">
+    <button class="btn btn-info col-12" (click)="openEditModal(line.id);">
+      <i class="fa fa-edit"  style="font-size:25px" aria-hidden="true"></i>
+    </button>
+  </div>
 </div>
+
+
 
 <div class="col-md-8">
     <tabset>

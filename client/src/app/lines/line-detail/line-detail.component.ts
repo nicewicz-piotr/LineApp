@@ -9,6 +9,8 @@ import { error } from 'protractor';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { EditLineModalComponent } from 'src/app/modals/edit-line-modal/edit-line-modal.component';
 import { ToastrService } from 'ngx-toastr';
+import { Notification } from "../../_models/notification";
+import { InsertNotificationModalComponent } from 'src/app/modals/insert-notification-modal/insert-notification-modal.component';
 
 
 @Component({
@@ -72,11 +74,41 @@ export class LineDetailComponent implements OnInit {
   openEditModal(){
     const line = this.line;
     this.bsModalRef = this.modalService.show(EditLineModalComponent, {initialState: { line }, animated: true, class: 'modal-lg'});
-    this.bsModalRef.content.notifyParent.subscribe((result: Line)=>{
+    this.bsModalRef.content.notifyParent.subscribe((result: Line) => {
       
       this.editLineById(result);
     })
     
   }
+
+  insertNotification(notification: Notification){
+  
+    //let urlId = Number(this.route.snapshot.paramMap.get('id'))
+    //this.editedElement = this.lines.find(e => e.id === urlId);
+    notification.lineId = this.line.id
+    //console.log(line)
+    this.lineService.insertNotification(notification).subscribe((result) => {
+      
+      console.log(result);
+      setTimeout(() => {
+        this.loadLine(); //???
+      }, 500);
+
+      //this.loadLine();
+      this.toastr.success("Successfully added");
+    });
+    
+    
+  }
+
+  openInsertNotificationModal(){
+    const line = this.line;
+    this.bsModalRef = this.modalService.show(InsertNotificationModalComponent, { animated: true, class: 'modal-lg'});
+    this.bsModalRef.content.notifyParent.subscribe((result: Notification) => {
+      
+      this.insertNotification(result);
+    })
+    
+  }  
   
 }

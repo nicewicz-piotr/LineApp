@@ -1,4 +1,4 @@
-using API.Configurations;
+//using API.Configurations;
 using API.Data;
 using API.Helpers;
 using API.Interfaces;
@@ -17,7 +17,7 @@ namespace API.Extensions
         {
             
             var emailConfig = config.GetSection("EmailConfiguration")
-                                    .Get<EmailConfiguration>();
+                                    .Get<EmailSettings>();
             services.AddSingleton(emailConfig);
             services.AddScoped<IEmailService, EmailService>();
             //services.AddSingleton<PresenceTracker>();

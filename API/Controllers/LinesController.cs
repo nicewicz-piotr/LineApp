@@ -120,7 +120,7 @@ namespace API.Controllers
         }
 
         [HttpPost("add-notification")]
-        public async Task<ActionResult<PhotoDto>> AddNotification(NotificationDto notificationDto)
+        public async Task<ActionResult> AddNotification(NotificationDto notificationDto)
         {
             AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
             
@@ -143,7 +143,7 @@ namespace API.Controllers
             lineItem.Notifications.Add(notification);
 
             if (await _unitOfWork.Complete())
-                return StatusCode(StatusCodes.Status201Created); //CreatedAtAction(); CreatedAtRoute
+                return StatusCode(StatusCodes.Status201Created, notification.Id); //CreatedAtAction(); CreatedAtRoute
 
             return BadRequest("Problem adding notification");
         }
