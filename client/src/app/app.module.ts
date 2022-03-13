@@ -35,6 +35,7 @@ import { ForgotPasswordModalComponent } from './modals/forgot-password-modal/for
 import { ResetPasswordComponent } from './resetpassword/resetpassword.component';
 import { InsertNotificationModalComponent } from './modals/insert-notification-modal/insert-notification-modal.component';
 import { PhotoEditorComponent } from './notifications/photo-editor/photo-editor.component';
+import { PhotoInputComponent } from './_forms/photo-input/photo-input.component';
 
 
 @NgModule({
@@ -64,6 +65,7 @@ import { PhotoEditorComponent } from './notifications/photo-editor/photo-editor.
     ResetPasswordComponent,
     InsertNotificationModalComponent,
     PhotoEditorComponent,
+    PhotoInputComponent,
   ],
   imports: [
     BrowserModule,

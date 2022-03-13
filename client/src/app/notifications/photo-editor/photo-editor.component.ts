@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Notification } from 'src/app/_models/notification';
 import { Photo } from 'src/app/_models/photo';
 import { environment } from 'src/environments/environment';
@@ -11,14 +12,13 @@ import { environment } from 'src/environments/environment';
 })
 export class PhotoEditorComponent implements OnInit {
 
-  @Input() notification: Notification;
+  //@Input() notification: Notification;
   uploader: FileUploader;
   hasBaseDropzoneOver = false;
   baseUrl = environment.apiUrl;
 
 
-  constructor() { 
-    console.log(this.notification)
+  constructor(bsModalRef: BsModalRef) { 
   }
 
   ngOnInit(): void {
@@ -31,7 +31,8 @@ export class PhotoEditorComponent implements OnInit {
 
   initializeUploader(){
     this.uploader = new FileUploader({
-      url: this.baseUrl + 'notifications/add-photo' + this.notification.id,
+      //url: this.baseUrl + 'notifications/add-photo' + this.notification.id,
+      url: this.baseUrl + 'lines/add-notification',
       authToken: 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token,
       isHTML5: true,
       allowedFileType: ['image'],
@@ -48,7 +49,7 @@ export class PhotoEditorComponent implements OnInit {
       if(response)
       {
         const photo: Photo = JSON.parse(response); //parse response out of JSON 
-        this.notification.photos.push(photo);
+        //this.notification.photos.push(photo);
         }
       }
     }

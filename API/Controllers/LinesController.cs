@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.DTOs;
@@ -6,9 +7,11 @@ using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace API.Controllers
 {
@@ -17,8 +20,10 @@ namespace API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        public LinesController(IMapper mapper, IUnitOfWork unitOfWork)
+        private readonly IPhotoService _photoService;
+        public LinesController(IMapper mapper, IUnitOfWork unitOfWork, IPhotoService photoService)
         {
+            _photoService = photoService;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -120,30 +125,104 @@ namespace API.Controllers
         }
 
         [HttpPost("add-notification")]
-        public async Task<ActionResult> AddNotification(NotificationDto notificationDto)
+        //public async Task<ActionResult> AddNotification(IFormFile files, [FromForm]string jsonData)
+        public async Task<ActionResult> AddNotification([FromForm] Request request)        
         {
+            List<Photo> photos = new List<Photo>();
+            List<IFormFile> files = request.files;
+            string jsonData = request.jsonData;
+
+            System.Console.WriteLine(jsonData);
+            //System.Console.WriteLine(files.ContentType);
+            //System.Console.WriteLine(files.FileName);
+            //System.Console.WriteLine(files.OpenReadStream());
+            
             AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
             
             if(user == null) return Unauthorized();
 
+            NotificationDto notificationDto = JsonConvert.DeserializeObject<NotificationDto>(jsonData);
+            
             Line lineItem = await _unitOfWork.LineRepository.GetLineByIdAsync(notificationDto.LineId);
 
             if(lineItem == null) return NotFound(); 
+
+
+            var result = await _photoService.AddPhotosAsync(files);
+
+            //ActionResult temp = new Func<ImageUploadResult,ActionResult>(r)(() => { return BadRequest(); })();
+
+            //int arg = 5;
+            //string temp1 = ((Func<int, string>)((a) => { return a == 5 ? "correct" : "not correct"; }))(arg);
+            
+            //ImageUploadResult arg1 = null;
+            //string temp2 = ((Func<ImageUploadResult,ActionResult>)((a) => { return a.Error != null ? BadRequest(); }))(arg1);
+            
+
+            //result.ForEach(r => { (r.Error != null) {return BadRequest(r.Error.Message); } });
+
+            foreach(ImageUploadResult item in result)
+            {
+                if (item.Error != null) return BadRequest(item.Error.Message);    
+            }
+
+
+            //if (result.Error != null) return BadRequest(result.Error.Message);
+
 
             Notification notification = new Notification
             {
                 AppUser = user,
                 UserId = user.Id,
                 Line = lineItem,
-                LineId = lineItem.Id
+                LineId = lineItem.Id,
             };
+
+             
+
+            result.ForEach(r => {
+                                    Photo photo = new Photo {
+                                           Url = r.SecureUrl.AbsoluteUri, 
+                                           PublicId = r.PublicId, 
+                                           AppUser = user, 
+                                           Notification = notification};   
+                                    photos.Add(photo);
+                                });
+
+            /*
+            var photo = new Photo
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId,
+                AppUser = user,
+                Notification = notification
+            };
+            */
+            
 
             _mapper.Map(notificationDto, notification);
 
-            lineItem.Notifications.Add(notification);
+            //notification.Photos.Add(photo);
+            
+            //foreach (Photo item in photos)
+            //{
+            //    notification.Photos.Add(item);
+            //}
 
+            photos.ForEach(p => notification.Photos.Add(p));
+   
+
+            lineItem.Notifications.Add(notification);
+            
             if (await _unitOfWork.Complete())
-                return StatusCode(StatusCodes.Status201Created, notification.Id); //CreatedAtAction(); CreatedAtRoute
+
+                //System.Console.WriteLine();
+
+                return StatusCode(StatusCodes.Status201Created//, new {
+                    //UserId = user.Id,
+                    //LineId = lineItem.Id,
+                    //Id = notification.Id
+                /*}*/); //CreatedAtAction(); CreatedAtRoute
 
             return BadRequest("Problem adding notification");
         }
@@ -165,5 +244,11 @@ namespace API.Controllers
 
             return BadRequest("Problem deleting that notification");
         }
+    }
+
+    public class Request
+    {
+        public List<IFormFile> files { get; set; } 
+        public string jsonData { get; set; } 
     }
 }

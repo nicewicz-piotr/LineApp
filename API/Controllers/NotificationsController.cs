@@ -78,7 +78,7 @@ namespace API.Controllers
             return BadRequest("Failed to update notification");
         }
 
-
+        /*
         [HttpPost("add-photo/{notificationId}")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file, int notificationId)
         {
@@ -120,6 +120,7 @@ namespace API.Controllers
 
             return BadRequest("Problem adding photo");
         }
+        */
 
         [HttpDelete("{notificationId}/delete-photo/{photoId}")]
         public async Task<ActionResult> DeletePhoto(int photoId, int notificationId)
