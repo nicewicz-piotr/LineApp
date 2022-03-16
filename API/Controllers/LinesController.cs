@@ -125,17 +125,12 @@ namespace API.Controllers
         }
 
         [HttpPost("add-notification")]
-        //public async Task<ActionResult> AddNotification(IFormFile files, [FromForm]string jsonData)
         public async Task<ActionResult> AddNotification([FromForm] Request request)        
         {
             List<Photo> photos = new List<Photo>();
             List<IFormFile> files = request.files;
             string jsonData = request.jsonData;
 
-            System.Console.WriteLine(jsonData);
-            //System.Console.WriteLine(files.ContentType);
-            //System.Console.WriteLine(files.FileName);
-            //System.Console.WriteLine(files.OpenReadStream());
             
             AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
             
@@ -150,25 +145,10 @@ namespace API.Controllers
 
             var result = await _photoService.AddPhotosAsync(files);
 
-            //ActionResult temp = new Func<ImageUploadResult,ActionResult>(r)(() => { return BadRequest(); })();
-
-            //int arg = 5;
-            //string temp1 = ((Func<int, string>)((a) => { return a == 5 ? "correct" : "not correct"; }))(arg);
-            
-            //ImageUploadResult arg1 = null;
-            //string temp2 = ((Func<ImageUploadResult,ActionResult>)((a) => { return a.Error != null ? BadRequest(); }))(arg1);
-            
-
-            //result.ForEach(r => { (r.Error != null) {return BadRequest(r.Error.Message); } });
-
             foreach(ImageUploadResult item in result)
             {
                 if (item.Error != null) return BadRequest(item.Error.Message);    
             }
-
-
-            //if (result.Error != null) return BadRequest(result.Error.Message);
-
 
             Notification notification = new Notification
             {
@@ -188,26 +168,9 @@ namespace API.Controllers
                                            Notification = notification};   
                                     photos.Add(photo);
                                 });
-
-            /*
-            var photo = new Photo
-            {
-                Url = result.SecureUrl.AbsoluteUri,
-                PublicId = result.PublicId,
-                AppUser = user,
-                Notification = notification
-            };
-            */
             
 
             _mapper.Map(notificationDto, notification);
-
-            //notification.Photos.Add(photo);
-            
-            //foreach (Photo item in photos)
-            //{
-            //    notification.Photos.Add(item);
-            //}
 
             photos.ForEach(p => notification.Photos.Add(p));
    
@@ -215,8 +178,6 @@ namespace API.Controllers
             lineItem.Notifications.Add(notification);
             
             if (await _unitOfWork.Complete())
-
-                //System.Console.WriteLine();
 
                 return StatusCode(StatusCodes.Status201Created//, new {
                     //UserId = user.Id,

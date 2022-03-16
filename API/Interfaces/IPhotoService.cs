@@ -8,7 +8,6 @@ namespace API.Interfaces
     public interface IPhotoService
     {
         Task<List<ImageUploadResult>> AddPhotosAsync(IEnumerable<IFormFile> files);
-        //Task<ImageUploadResult> AddPhotoAsync(IFormFile file);
         Task<DeletionResult> DeletePhotoAsync(string publicId);
     }
 }

@@ -148,11 +148,6 @@ export class LinesService {
   insertNotification(notification: Notification){
     const headers = this.setAuthorizationHeader();
 
-    //console.log(notification)
-    //let description = notification.description;
-    //let file = notification.photos;
-    //let lineId = notification.lineId;
-
     const metadata:JSON = <JSON><unknown>{
       "LineId":  notification.lineId,
       "Description": notification.description
@@ -160,11 +155,12 @@ export class LinesService {
 
     let jsonData = JSON.stringify(metadata)
 
-    //console.log(file);
-
-
     const formData = new FormData();
-    formData.append('file', (notification.photos as unknown) as File);
+    
+    Array.from(notification.photos).forEach(element => {
+      formData.append('files', (element as unknown) as File);  
+    });
+    
     formData.append('jsonData', jsonData);
     
 

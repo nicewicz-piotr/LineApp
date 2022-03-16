@@ -40,35 +40,30 @@ export class InsertNotificationModalComponent implements OnInit {
 
   initializeForm(){
 
+    let extensions: string[] = ['jpg','bmp','png'];  
     this.insertNotificationForm = this.formBuilder.group({
-      //symbol: ['', Validators.required],
-      //length: ['' , [Validators.required, Validators.pattern("^(0|[1-9]\\d*)(\\.\\d+)?$")]],
       description: ['', Validators.required],
-      photos: ['', [Validators.required, this.requiredFileType('jpg')]]
+      photos: ['', [Validators.required, this.requiredFileType(extensions)]]
     })
-    //this.registerForm.controls.password.valueChanges.subscribe(() => {
-    //  this.registerForm.controls.confirmPassword.updateValueAndValidity();
-    //})
-    console.log(this.insertNotificationForm.value);
-    //this.insertLineForm.get('length').value;
   }
 
-  requiredFileType(type: string): ValidatorFn {
+  requiredFileType(type: string[]): ValidatorFn {
     return (control: AbstractControl) => {
-      const file = control.value;
-      if ( file ) {
-        const extension = file.name.split('.')[1].toLowerCase();
-        if ( type.toLowerCase() !== extension.toLowerCase() ) {
-          return {
-            requiredFileType: true
-          };
-        }
-        
-        return null;
-      }
 
-      return null;
-    };
+      const files = control.value as FileList;
+      let elements: string[] =[];
+      
+      Array.from(files).forEach(element => {
+        let extension: string = element.name.split('.')[1].toLowerCase();
+        elements.push(extension);
+      });
+      
+        const containsAll = elements.every(element => {
+           return type.includes(element);
+        });
+      
+      return (containsAll) ? null : {requiredFileType: containsAll};
+     
     }
-
+  }
 }

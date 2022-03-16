@@ -14,12 +14,13 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class PhotoInputComponent implements ControlValueAccessor {
   @Input() progress;
   onChange: Function;
-  public file: File | null = null;
+  public files: FileList | null = null;
 
   @HostListener('change', ['$event.target.files']) emitFiles( event: FileList ) {
-    const file = event && event.item(0);
-    this.onChange(file);
-    this.file = file;
+    const files = event;
+
+    this.files = files;
+    this.onChange(files);
   }
 
   constructor(private host: ElementRef<HTMLInputElement>) { }
@@ -27,7 +28,7 @@ export class PhotoInputComponent implements ControlValueAccessor {
   writeValue(value: null) {
     // clear file input
     this.host.nativeElement.value = '';
-    this.file = null;
+    this.files = null;
   }
   registerOnChange(fn: Function) {
     this.onChange = fn;
