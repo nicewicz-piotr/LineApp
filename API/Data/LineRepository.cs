@@ -35,6 +35,7 @@ namespace API.Data
         {
             return await _context.Lines
               .Include(i => i.Notifications)
+              .ThenInclude(p => p.Photos)
               .FirstOrDefaultAsync(x => x.Id == id);
             //return await _context.Lines.FindAsync(id);
             //return await .FindAsync(id).Include(p => p.Notifications).

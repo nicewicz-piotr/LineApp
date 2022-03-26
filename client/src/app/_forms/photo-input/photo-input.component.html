@@ -1,7 +1,14 @@
-<div>
-    <span>Choose file</span>
-    <!--<span>{{file ? file.name : 'or drag and drop file here' }}</span>-->
+<!--<div>
+    <span>Choose photos: </span>
+    <span *ngFor="let file of files"><p>{{file ? file.name : 'or drag and drop file here' }}</p></span>
     <input class="file-input" type="file" multiple>
+</div>
+-->
+
+<div class="form-group">
+    <label for="formFile" class="form-label mt-4">Choose photos .jpg, .bmp, .png:</label>
+    <span *ngFor="let file of files"><p>{{file ? file.name : 'or drag and drop file here' }}</p></span>
+    <input class="form-control" type="file" multiple>
 </div>
   
 <!--<app-progress [progress]="progress"></app-progress>-->

@@ -10,6 +10,7 @@ namespace API.Entities
         public string Department { get; set; }
         public ICollection<AppUserRole> UserRoles { get; set; }
         public ICollection<Notification> Notifications { get; set; }
+        public ICollection<Photo> Photos { get; set; }
 
     }
 }

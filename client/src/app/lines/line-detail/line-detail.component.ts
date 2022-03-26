@@ -11,6 +11,7 @@ import { EditLineModalComponent } from 'src/app/modals/edit-line-modal/edit-line
 import { ToastrService } from 'ngx-toastr';
 import { Notification } from "../../_models/notification";
 import { InsertNotificationModalComponent } from 'src/app/modals/insert-notification-modal/insert-notification-modal.component';
+import { Pagination } from 'src/app/_models/pagination';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class LineDetailComponent implements OnInit {
   line: Line;
   editedElement: Line;
   user: User;
-  bsModalRef: BsModalRef; 
+  bsModalRef: BsModalRef;
+  pagination: Pagination; 
 
   constructor(private accountService: AccountService,
               private route: ActivatedRoute,
@@ -49,6 +51,7 @@ export class LineDetailComponent implements OnInit {
     this.lineService.getLine(urlParamId).subscribe(line => {
       this.line = line;
       console.log("Load line parameter:", line)
+      console.log(this.line.notifications)
     })
   }
 

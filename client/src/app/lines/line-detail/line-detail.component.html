@@ -38,8 +38,52 @@
         <app-notification-list [line]="line">
         </app-notification-list>
       </tab>
-      <tab heading="Basic Title 1">Basic content 1</tab>
+      <tab heading="Photos">
+
+        <div class="container">
+          <div class="row row-cols-2 mb-3" *ngFor="let notification of line.notifications">
+            <div class="col" *ngFor="let photo of notification.photos">
+              
+              <div class="card bg-secondary m-2" > <!--style="max-width: 20rem;"-->
+                <h4 class="card-title"> Notification no: {{notification.id}}</h4>
+                <h5 class="card-title">{{notification.created | date:'short'}}</h5>
+                  <div class="card-body card-img-wrapper">
+                    <img src="{{photo.url}}" alt="{{line.Id}}" class="card-img-top">
+                  </div>
+              </div>
+            
+            </div>
+          </div>
+        </div>
+
+      <div class="d-sm-flex flex-sm-row justify-content-center">
+
+        <div class="pagination pagination-lg flex-wrap" *ngIf="pagination">
+            <pagination class="flex-wrap" 
+              [totalItems]="pagination.totalItems" 
+              [itemsPerPage]="pagination.itemsPerPage" 
+              [(ngModel)]="pagination.currentPage" 
+              (numPages)="smallnumPages = $event" 
+              (pageChanged)="pageChanged($event)">
+            </pagination>
+
+            <div class="alert alert-dismissible alert-light">
+                selected page no: {{pagination.currentPage}} from {{pagination.totalPages}}
+            </div>
+
+            <div class="m-1" id="Select2">
+                <select class="form-select ml-1" name='pageSize' (change)="loadLines()" [(ngModel)]="lineParams.pageSize">
+                    <option value='5'>5</option>
+                    <option value='10'>10</option> 
+                </select>
+            </div>
+        </div>
+      </div>
+
+      </tab>
+        
       <tab heading="Basic Title 2">Basic content 2</tab>
+
     </tabset>
   </div>
 

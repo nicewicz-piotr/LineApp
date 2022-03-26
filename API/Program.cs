@@ -31,6 +31,7 @@ namespace API
                 await Seed.SeedUsers(userManager, roleManager);
                 await Seed.SeedLines(context);
                 await Seed.SeedNotifications(context);
+                await Seed.SeedPhotos(context);
             }
             catch (System.Exception ex)
             {

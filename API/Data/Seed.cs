@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 //using System.Security.Cryptography;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -82,13 +83,25 @@ namespace API.Data
 
         public static async Task SeedNotifications(DataContext context)
         {
-             if(await context.Notifications.AnyAsync()) return;
+            if(await context.Notifications.AnyAsync()) return;
 
             var notificationData = await System.IO.File.ReadAllTextAsync("Data/SeedDataJson/NotificationSeedData.json");
             var notifications = JsonSerializer.Deserialize<List<Notification>>(notificationData);
             if(notifications == null) return;
 
             await context.Notifications.AddRangeAsync(notifications);
+            await context.SaveChangesAsync();
+        }
+
+        public static async Task SeedPhotos(DataContext context)
+        {
+            if(await context.Notifications.AnyAsync() == false) return;
+
+            var photoData = await System.IO.File.ReadAllTextAsync("Data/SeedDataJson/PhotoSeedData.json");
+            var photos = JsonSerializer.Deserialize<List<Photo>>(photoData);
+            if(photos == null) return;
+
+            await context.Photos.AddRangeAsync(photos);
             await context.SaveChangesAsync();
         }
 
@@ -101,6 +114,7 @@ namespace API.Data
             // await context.Database.ExecuteSqlRawAsync("DELETE FROM sqlite_sequence WHERE name = AspNetUserRoles;");
 
             await context.Database.ExecuteSqlRawAsync("DELETE FROM AspNetUserRoles;");
+            await context.Database.ExecuteSqlRawAsync("DELETE FROM Photos;");
             await context.Database.ExecuteSqlRawAsync("DELETE FROM Notifications;");
             await context.Database.ExecuteSqlRawAsync("DELETE FROM AspNetUsers;");
             await context.Database.ExecuteSqlRawAsync("DELETE FROM Lines;");
@@ -109,6 +123,7 @@ namespace API.Data
             await context.Database.ExecuteSqlRawAsync("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='Lines';");
             await context.Database.ExecuteSqlRawAsync("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='AspNetUsers';");
             await context.Database.ExecuteSqlRawAsync("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='Notifications';");
+            await context.Database.ExecuteSqlRawAsync("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='Photos';");
             await context.Database.ExecuteSqlRawAsync("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='AspNetUserRoles';");
             await context.Database.ExecuteSqlRawAsync("UPDATE SQLITE_SEQUENCE SET SEQ=0 WHERE NAME='AspNetRoles';");
 

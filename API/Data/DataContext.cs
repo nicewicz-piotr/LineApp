@@ -21,6 +21,7 @@ namespace API.Data
         //DbSet<AppUser>, DbSet<AppRole>, DbSet<AppUserRole> are included by identitycontext   
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Line> Lines { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -48,6 +49,17 @@ namespace API.Data
             .HasOne(n => n.AppUser)
             .WithMany(n => n.Notifications)
             .HasForeignKey(n => n.UserId);
+
+            builder.Entity<Photo>()
+            .HasOne(p => p.Notification)
+            .WithMany(p => p.Photos)
+            .HasForeignKey(p => p.NotificationId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Photo>()
+            .HasOne(p => p.AppUser)
+            .WithMany(p => p.Photos)
+            .HasForeignKey(p => p.AppUserId);
 
             builder.ApplyUtcDateTimeConverter();
         }
