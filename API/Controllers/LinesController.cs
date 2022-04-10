@@ -52,9 +52,10 @@ namespace API.Controllers
             return BadRequest("Failed to create line");
         }
 
-        /*with notifications dto*/
+        /*
+        
         [HttpGet("{id}")] 
-        public async Task<ActionResult<LineDto>> GetLineAsync(int id)
+        public async Task<ActionResult<LineDto>> GetLineAsync(int id) //paginacja notyfikacji i zdjęć
         {
             AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
             
@@ -68,6 +69,32 @@ namespace API.Controllers
 
             return Ok(lineDto);
         }        
+        */
+
+
+        /*with notifications dto*/
+        [HttpGet("{id}")] 
+        public async Task<ActionResult<LineDto>> GetLineAsync(int id, [FromQuery] LineParams lineParams) //paginacja notyfikacji i zdjęć
+        {
+            AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
+            
+            if(user == null) return Unauthorized();
+
+            var lineItem = await _unitOfWork.LineRepository.GetLineByIdAsync(id, lineParams);
+            
+            if(lineItem.line == null) return NotFound();
+    
+            var lineDto = _mapper.Map<LineDto>(lineItem.line);
+
+            //nagłówek potrzbny do angulara
+            Response.AddPaginationHeader(lineItem.pagedListOfPhotos.CurrentPage,
+                                         lineItem.pagedListOfPhotos.PageSize,
+                                         lineItem.pagedListOfPhotos.TotalCount,
+                                         lineItem.pagedListOfPhotos.TotalPages);
+
+            return Ok(lineDto);
+        } 
+
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LineDto>>> GetLinesForPage([FromQuery] LineParams lineParams)
@@ -205,8 +232,28 @@ namespace API.Controllers
 
             return BadRequest("Problem deleting that notification");
         }
+
+        //przeniesc do notification controller
+        /*
+        [HttpGet("{id}", Name = "GetNotificationForLine")] 
+        public async Task<ActionResult<IEnumerable<NotificationDto>>> GetNotificationsForLine(int id, [FromQuery] NotificationParams notificationParams)
+        {
+            //lineParams.CurrentLineId = _unitOfWork.LineRepository.
+            AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
+            
+            if(user == null) return Unauthorized();
+
+            var notifications = await _unitOfWork.LineRepository.GetNotificationsForLineAsync(notificationParams, id);
+
+            Response.AddPaginationHeader(notifications.CurrentPage, notifications.PageSize, notifications.TotalCount, notifications.TotalPages);
+
+            return Ok(notifications);
+        }
+        */
+
     }
 
+    //przenieść
     public class Request
     {
         public List<IFormFile> files { get; set; } 

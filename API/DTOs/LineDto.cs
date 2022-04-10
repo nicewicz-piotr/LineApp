@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using API.DTOs;
 
-namespace API.Entities
+namespace API.DTOs
 {
     public class LineDto
     {
