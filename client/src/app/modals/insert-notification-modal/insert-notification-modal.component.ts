@@ -43,7 +43,7 @@ export class InsertNotificationModalComponent implements OnInit {
     let extensions: string[] = ['jpg','bmp','png'];  
     this.insertNotificationForm = this.formBuilder.group({
       description: ['', Validators.required],
-      photos: ['', [Validators.required, this.requiredFileType(extensions)]]
+      photos: ['', [this.requiredFileType(extensions)]]
     })
   }
 

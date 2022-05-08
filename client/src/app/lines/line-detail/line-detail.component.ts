@@ -11,7 +11,11 @@ import { EditLineModalComponent } from 'src/app/modals/edit-line-modal/edit-line
 import { ToastrService } from 'ngx-toastr';
 import { Notification } from "../../_models/notification";
 import { InsertNotificationModalComponent } from 'src/app/modals/insert-notification-modal/insert-notification-modal.component';
-import { Pagination } from 'src/app/_models/pagination';
+import { PaginatedResult, Pagination } from 'src/app/_models/pagination';
+import { LineParams } from 'src/app/_models/lineParams';
+import { Photo } from 'src/app/_models/photo';
+import { LineWithPagedPhotos } from 'src/app/_models/lineWithPagedPhotos';
+import { PhotoParams } from 'src/app/_models/photoParams';
 
 
 @Component({
@@ -20,12 +24,18 @@ import { Pagination } from 'src/app/_models/pagination';
   styleUrls: ['./line-detail.component.css']
 })
 export class LineDetailComponent implements OnInit {
-  lines: Line[];
+  //lines: Line[];
+  //lineWithPagedPhotos: LineWithPagedPhotos;
   line: Line;
+  photos: Photo[];
   editedElement: Line;
   user: User;
   bsModalRef: BsModalRef;
-  pagination: Pagination; 
+  pagination: Pagination;
+  lineParams: LineParams;
+  photoParams: PhotoParams; 
+  showChildTable: boolean[] = [];
+  paginatedPhotos: PaginatedResult<Photo>; 
 
   constructor(private accountService: AccountService,
               private route: ActivatedRoute,
@@ -35,6 +45,9 @@ export class LineDetailComponent implements OnInit {
               private toastr: ToastrService) {
       this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      
+      //this.lineParams = this.lineService.getLineParams();
+      this.photoParams = this.lineService.getPhotoParams();
    }
 
   ngOnInit(): void {
@@ -48,11 +61,45 @@ export class LineDetailComponent implements OnInit {
     urlParamId = urlParamId ? urlParamId : 0;
     //console.log(urlParamId)
 
-    this.lineService.getLine(urlParamId).subscribe(line => {
-      this.line = line;
-      console.log("Load line parameter:", line)
-      console.log(this.line.notifications)
+
+    //this.lineService.setLineParams(this.lineParams);
+    //this.lineService.getLine(this.lineParams, urlParamId).subscribe(response => {
+
+      this.lineService.setPhotoParams(this.photoParams);
+      this.lineService.getLine(this.photoParams, urlParamId).subscribe(response => {
+  
+
+
+
+      //this.photos = this.line.notifications.flat().map(item => item.photos).flat();
+      //console.log(x)
+      //this.photos = x.map(item => item.photos).flat();
+      //console.log(this.photos);
+
+     
+      this.line = response.result.lineItem.line;
+      console.log("+++++++++++++++++++++++")
+      console.log(this.line)
+      console.log("+++++++++++++++++++++++")
+      this.paginatedPhotos = response.result.lineItem.pagedListOfPhotos;
+      console.log(this.paginatedPhotos)
+      this.pagination = response.pagination;
+      
+      
+
+      console.log(this.pagination.totalItems)
+      console.log(this.pagination.itemsPerPage)
+      //this.line = line;
+      //console.log("Load line parameter:", line)
+      //console.log(this.line.notifications)
     })
+  }
+
+  pageChanged(event: any){
+    this.photoParams.pageNumber = event.page;
+    this.lineService.setPhotoParams(this.photoParams);
+    this.loadLine();
+    this.showChildTable = []; //stop showing all child table
   }
 
   editLineById(line: Line){

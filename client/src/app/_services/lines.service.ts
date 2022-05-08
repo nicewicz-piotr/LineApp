@@ -8,6 +8,9 @@ import { LineParams } from '../_models/lineParams';
 import { PaginatedResult } from '../_models/pagination';
 import { Notification } from "../_models/notification";
 import { Photo } from '../_models/photo';
+import { LineWithPagedPhotos } from '../_models/lineWithPagedPhotos';
+import { PhotoParams } from '../_models/photoParams';
+import { threadId } from 'worker_threads';
 
 /*
 const httpOptions = {
@@ -30,6 +33,7 @@ export class LinesService {
   lines: Line[] = [];
   lineCache = new Map();
   lineParams: LineParams;
+  photoParams: PhotoParams; 
   
   headers = new HttpHeaders({
     Authorization: 'Bearer ' + JSON.parse(localStorage.getItem('user'))?.token
@@ -37,6 +41,7 @@ export class LinesService {
 
   constructor(private http: HttpClient) { 
     this.lineParams = new LineParams();
+    this.photoParams = new PhotoParams();
   }
 
   setAuthorizationHeader(): HttpHeaders{
@@ -49,7 +54,7 @@ export class LinesService {
 
     //console.log(Object.values(lineParams).join('-'));
     var response = this.lineCache.get(Object.values(lineParams).join('-'));
-
+    console.log(this.lineCache)
     //if(response){
     //  return of(response);
     //}
@@ -75,6 +80,15 @@ export class LinesService {
     this.lineParams = params;
   }
 
+  getPhotoParams(){
+    return this.photoParams;
+  }
+
+  setPhotoParams(params: PhotoParams){
+    this.photoParams = params;
+  }
+
+
 
   private getPaginationResult<T>(url, params) {
 
@@ -85,6 +99,7 @@ export class LinesService {
     return this.http.get<T>(url,  { headers, observe: 'response', params }).pipe(
       map(response => {
         paginatedResult.result = response.body;
+        console.log(response)
         if (response.headers.get('Pagination') !== null) {
           paginatedResult.pagination = JSON.parse(response.headers.get('Pagination')); //download from header and set properties of pagination interface
         }
@@ -103,19 +118,49 @@ export class LinesService {
       return params;
   }
 
-  getLine(id: number){
+  
+  //getLine(id: number){
     //console.log(this.lineCache);
-    const line = [...this.lineCache.values()]
-    .reduce((arr, elem) => arr.concat(elem.result), [])
-    .find((line: Line) => line.id === id);
+    //const line = [...this.lineCache.values()]
+    //.reduce((arr, elem) => arr.concat(elem.result), [])
+    //.find((line: Line) => line.id === id);
 
     //if(line){
     //  return of(line);
     //}
 
-    const headers = this.setAuthorizationHeader();
+    //const headers = this.setAuthorizationHeader();
 
-    return this.http.get<Line>(this.baseUrl + 'lines/' + id, { headers } /*httpOptions*/);
+    //return this.http.get<Line>(this.baseUrl + 'lines/' + id, { headers } /*httpOptions*/);
+  //}
+
+  //getLine(lineParams: LineParams, id: number){
+    getLine(lineParams: PhotoParams, id: number){
+    
+    console.log(lineParams)
+    console.log(id)
+
+    //if(line){
+    //  return of(line);
+    //}
+
+    //const line = [...this.lineCache.values()]
+    //.reduce((arr, elem) => arr.concat(elem.result), [])
+    //.find((line: Line) => line.id === id);
+
+    //var response = this.lineCache.get(Object.values(lineParams).join('-'));
+    //console.log(this.lineCache)
+
+    let params = this.getPaginationHeaders(lineParams.pageNumber, lineParams.pageSize);
+
+    return this.getPaginationResult<LineWithPagedPhotos>(this.baseUrl + 'lines/' + id, params)
+    .pipe(map(response => {
+      console.log("**********");
+      console.log(response.result);
+      console.log("**********");
+      this.lineCache.set(Object.values(lineParams).join('-'), response);
+      return response;
+    }))
   }
 
   updateLine(line: Line){

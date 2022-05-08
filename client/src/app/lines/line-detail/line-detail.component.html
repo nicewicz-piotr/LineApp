@@ -40,13 +40,14 @@
       </tab>
       <tab heading="Photos">
 
+        
         <div class="container">
-          <div class="row row-cols-2 mb-3" *ngFor="let notification of line.notifications">
-            <div class="col" *ngFor="let photo of notification.photos">
-              
-              <div class="card bg-secondary m-2" > <!--style="max-width: 20rem;"-->
-                <h4 class="card-title"> Notification no: {{notification.id}}</h4>
-                <h5 class="card-title">{{notification.created | date:'short'}}</h5>
+          <!--<div class="row row-cols-2 mb-3" *ngFor="let notification of line.notifications">
+            <div class="col" *ngFor="let photo of notification.photos">-->
+            <div class="row">
+            <div class="card col-5 m-3" *ngFor="let photo of paginatedPhotos">
+                <h4 class="card-title"> Notification no: {{photo.notificationId}}</h4>
+                <!--<h5 class="card-title">{{notification.created | date:'short'}}</h5>-->
                   <div class="card-body card-img-wrapper">
                     <img src="{{photo.url}}" alt="{{line.Id}}" class="card-img-top">
                   </div>
@@ -54,9 +55,21 @@
             
             </div>
           </div>
-        </div>
-
-      <!--
+      
+        <div class="container">
+            <div class="col" *ngFor="let photo of photos">
+              
+              <div class="card bg-secondary m-2" > 
+      
+                  <div class="card-body card-img-wrapper">
+                    <img src="{{photo.url}}" alt="{{line.Id}}" class="card-img-top">
+                  </div>
+              </div>
+            
+            </div>
+          </div>
+        
+      
       <div class="d-sm-flex flex-sm-row justify-content-center">
 
         <div class="pagination pagination-lg flex-wrap" *ngIf="pagination">
@@ -73,14 +86,14 @@
             </div>
 
             <div class="m-1" id="Select2">
-                <select class="form-select ml-1" name='pageSize' (change)="loadLines()" [(ngModel)]="lineParams.pageSize">
-                    <option value='5'>5</option>
-                    <option value='10'>10</option> 
+                <select class="form-select ml-1" name='pageSize' (change)="loadLine()" [(ngModel)]="photoParams.pageSize">
+                    <option value='4'>4</option>
+                    <option value='8'>8</option> 
                 </select>
             </div>
         </div>
       </div>
-      -->
+      
       
       </tab>
         
