@@ -43,7 +43,7 @@ namespace API.Data
             //return await .FindAsync(id).Include(p => p.Notifications).
         }      
 
-        public async Task<LineWithPagedPhotosDto> GetLineByIdAsync(int id, LineParams lineParams)
+        public async Task<LineWithPagedPhotosDto> GetLineByIdAsync(int id, PhotoParams photoParams)
         {
             //1. policzyć całkowitą ilośc elementów w kolekcji photos
             //2. zwrócic przefiltrowany zbiór elementów photos
@@ -53,32 +53,44 @@ namespace API.Data
 
             if(query.Any() == false) return null; 
             //1
-            //int countPhotos = query.Include(n => n.Notifications).ThenInclude(p => p.Photos)
-            //    .SelectMany( l => l.Notifications).SelectMany(n => n.Photos).Count();
 
   
-            //var photosQuery =  query.SelectMany( l => l.Notifications).SelectMany(n => n.Photos)
-            //    .Skip((lineParams.PageNumber - 1) * lineParams.PageSize).Take(lineParams.PageSize);
+            var photosQuery =  query.SelectMany( l => l.Notifications).SelectMany(n => n.Photos);
             
             //2
-            var photosQuery =  query.SelectMany( l => l.Notifications).SelectMany(n => n.Photos);
+            //var photosQuery =  query.SelectMany( l => l.Notifications).SelectMany(n => n.Photos);
 
-            //var x = query.SelectMany( l => l.Notifications).Select(n => n.Photos);
+           
             
             var pagedListOfPhotos = await PagedList<PhotoDto>.CreateAsync(photosQuery.ProjectTo<PhotoDto>(_mapper.
-            ConfigurationProvider).AsNoTracking(), lineParams.PageNumber, lineParams.PageSize);
+            ConfigurationProvider).AsNoTracking(), photoParams.PageNumber, photoParams.PageSize);
             
 
-            //return await query.FirstOrDefaultAsync(x => x.Id == id);
+            //List<int> photosId = new List<int>();
+            //pagedListOfPhotos.ForEach(p => photosId.Add(p.Id));
+           
+            
+            /*
             var lineWithPhotos = await query.Include(n => n.Notifications)
-                .ThenInclude(p => p.Photos.Skip((lineParams.PageNumber - 1) * lineParams.PageSize)
+                .ThenInclude(p => p.Photos.OrderBy(p => p.Id)
+                .Skip((lineParams.PageNumber - 1) * lineParams.PageSize)
                 .Take(lineParams.PageSize))
+                .FirstOrDefaultAsync(x => x.Id == id);
+            */
+
+            
+            //var lineWithPhotos = await query.Include(n => n.Notifications)
+             //   .ThenInclude(p => p.Photos.OrderBy(p => p.Id))
+             //   .FirstOrDefaultAsync(x => x.Id == id);
+
+            var lineWithPhotos = await query.Include(n => n.Notifications)
+                //.ThenInclude(p => p.Photos.Where(p => photosId.Any(i => i == p.Id))) // porównaj id z listą id wylistowanych photos, niezbyt wydajne
                 .FirstOrDefaultAsync(x => x.Id == id);
 
 
+            var lineDto = _mapper.Map<LineDto>(lineWithPhotos);
 
-            return new LineWithPagedPhotosDto{pagedListOfPhotos = pagedListOfPhotos, line = lineWithPhotos};
-
+            return new LineWithPagedPhotosDto{pagedListOfPhotos = pagedListOfPhotos, line = lineDto};
         }
 
         public async Task<Line> GetLineBySymbolAsync(string symbol)

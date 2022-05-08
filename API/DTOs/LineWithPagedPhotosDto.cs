@@ -8,8 +8,7 @@ namespace API.DTOs
 {
     public class LineWithPagedPhotosDto
     {
+        public LineDto line;
         public PagedList<PhotoDto> pagedListOfPhotos;
-        public Line line;
-
     }
 }

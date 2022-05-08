@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
@@ -12,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace API.Controllers
 {
@@ -74,17 +77,18 @@ namespace API.Controllers
 
         /*with notifications dto*/
         [HttpGet("{id}")] 
-        public async Task<ActionResult<LineDto>> GetLineAsync(int id, [FromQuery] LineParams lineParams) //paginacja notyfikacji i zdjęć
+        //public async Task<ActionResult<LineDto>> GetLineAsync(int id, [FromQuery] LineParams lineParams) //paginacja notyfikacji i zdjęć
+        public async Task<ActionResult<LineWithPagedPhotosDto>> GetLineAsync(int id, [FromQuery] PhotoParams photoParams)
         {
             AppUser user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
             
             if(user == null) return Unauthorized();
 
-            var lineItem = await _unitOfWork.LineRepository.GetLineByIdAsync(id, lineParams);
+            var lineItem = await _unitOfWork.LineRepository.GetLineByIdAsync(id, photoParams);
             
-            if(lineItem.line == null) return NotFound();
-    
-            var lineDto = _mapper.Map<LineDto>(lineItem.line);
+            if(lineItem == null) return NotFound();
+
+            //var lineDto = _mapper.Map<LineDto>(lineItem.line);
 
             //nagłówek potrzbny do angulara
             Response.AddPaginationHeader(lineItem.pagedListOfPhotos.CurrentPage,
@@ -92,7 +96,14 @@ namespace API.Controllers
                                          lineItem.pagedListOfPhotos.TotalCount,
                                          lineItem.pagedListOfPhotos.TotalPages);
 
-            return Ok(lineDto);
+            var serializer = new Newtonsoft.Json.JsonSerializer()
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            JObject lineWithPaginatedPhotos = JObject.FromObject(new { lineItem }, serializer);
+        
+            return Ok(lineWithPaginatedPhotos.ToString());
         } 
 
 

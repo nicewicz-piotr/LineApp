@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Helpers;
 using API.Interfaces;
@@ -33,7 +34,7 @@ namespace API.Services
 
             List<ImageUploadResult> uploadResultsList = new List<ImageUploadResult>();
 
-            foreach(IFormFile file in files)
+            foreach(IFormFile file in files ?? Enumerable.Empty<IFormFile>())
             {
                 if(file.Length > 0)
                 {

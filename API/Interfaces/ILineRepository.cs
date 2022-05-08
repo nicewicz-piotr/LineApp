@@ -10,7 +10,7 @@ namespace API.Interfaces
     {
         Task<IEnumerable<Line>> GetLinesAsync();
         Task<Line> GetLineByIdAsync(int id);
-        Task<LineWithPagedPhotosDto> GetLineByIdAsync(int id, LineParams lineParams);
+        Task<LineWithPagedPhotosDto> GetLineByIdAsync(int id, PhotoParams photoParams);
         Task<Line> GetLineBySymbolAsync(string symbol);
         Task<PagedList<LineDto>> GetLinesAsync(LineParams lineParams);
         
